@@ -1,7 +1,7 @@
 replicaCount: 2
 image:
   repository: nikhilmhatre0317/shopsphere-user-service
-  tag: "6e18d05"
+  tag: "84152f3"
   pullPolicy: IfNotPresent
 serviceAccount:
   create: true
