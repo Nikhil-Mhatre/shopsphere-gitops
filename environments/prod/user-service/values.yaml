@@ -1,6 +1,7 @@
 replicaCount: 3
 
 image:
+  repository: nikhilmhatre0317/shopsphere-user-service
   tag: "84152f3"
 
 resources:
