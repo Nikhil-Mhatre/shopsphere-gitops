@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
   repository: nikhilmhatre0317/shopsphere-user-service
-  tag: "54354dd"
+  tag: "6a8c11a"
 resources:
   requests:
     cpu: 100m
