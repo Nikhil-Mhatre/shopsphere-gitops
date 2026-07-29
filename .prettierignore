@@ -1,0 +1,3 @@
+# Helm templates
+charts/**/templates/*.yaml
+charts/**/templates/*.tpl

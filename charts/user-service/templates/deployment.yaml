@@ -1,56 +1,206 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: {{ include "user-service.fullname" . }}
+
   labels:
     {{- include "user-service.labels" . | nindent 4 }}
 
 spec:
+
   replicas: {{ .Values.replicaCount }}
+
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+
+  strategy:
+    type: {{ .Values.deployment.strategy.type }}
+
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
 
   selector:
     matchLabels:
       {{- include "user-service.selectorLabels" . | nindent 6 }}
 
   template:
+
     metadata:
+
       labels:
         {{- include "user-service.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+
+      annotations:
+
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
 
     spec:
+
       serviceAccountName: {{ include "user-service.serviceAccountName" . }}
 
+      automountServiceAccountToken: {{ .Values.serviceAccount.automount }}
+
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
+
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ include "user-service.name" . }}
 
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
 
           imagePullPolicy: {{ .Values.image.pullPolicy }}
 
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+
           ports:
-            - containerPort: {{ .Values.container.port }}
+            - name: http
+              containerPort: {{ .Values.container.port }}
+              protocol: TCP
 
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
 
-          livenessProbe:
-            httpGet:
-              path: {{ .Values.livenessProbe.path }}
-              port: {{ .Values.container.port }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          env:
+            # ------------------------------------------------------------------
+            # Application Configuration
+            # ------------------------------------------------------------------
 
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "user-service.fullname" . }}
+                  key: NODE_ENV
+
+            - name: HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "user-service.fullname" . }}
+                  key: HOST
+
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "user-service.fullname" . }}
+                  key: PORT
+
+            - name: SERVICE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "user-service.fullname" . }}
+                  key: SERVICE_NAME
+
+            - name: SERVICE_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "user-service.fullname" . }}
+                  key: SERVICE_VERSION
+
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "user-service.fullname" . }}
+                  key: LOG_LEVEL
+
+            # ------------------------------------------------------------------
+            # Database Configuration
+            # ------------------------------------------------------------------
+
+            - name: DATABASE_CONNECT_TIMEOUT_MS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "user-service.fullname" . }}
+                  key: DATABASE_CONNECT_TIMEOUT_MS
+
+            - name: DATABASE_LOG_QUERIES
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "user-service.fullname" . }}
+                  key: DATABASE_LOG_QUERIES
+
+            # ------------------------------------------------------------------
+            # JWT Secrets
+            # ------------------------------------------------------------------
+
+            - name: JWT_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (include "user-service.fullname" .) .Values.secret.existingSecret }}
+                  key: JWT_ACCESS_SECRET
+
+            - name: JWT_REFRESH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (include "user-service.fullname" .) .Values.secret.existingSecret }}
+                  key: JWT_REFRESH_SECRET
+
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (include "user-service.fullname" .) .Values.secret.existingSecret }}
+                  key: DATABASE_URL
+
+          {{- if .Values.probes.startup.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ printf "%s/%s/health" .Values.config.api.prefix .Values.config.api.version }}
+              port: http
+
+            initialDelaySeconds: {{ .Values.probes.startup.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.startup.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.startup.timeoutSeconds }}
+            failureThreshold: {{ .Values.probes.startup.failureThreshold }}
+          {{- end }}
+
+          {{- if .Values.probes.readiness.enabled }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.readinessProbe.path }}
-              port: {{ .Values.container.port }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+              path: {{ printf "%s/%s/health/ready" .Values.config.api.prefix .Values.config.api.version }}
+              port: http
 
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            runAsNonRoot: true
-            capabilities:
-              drop:
-                - ALL
+            initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
+            failureThreshold: {{ .Values.probes.readiness.failureThreshold }}
+          {{- end }}
+
+          {{- if .Values.probes.liveness.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ printf "%s/%s/health/live" .Values.config.api.prefix .Values.config.api.version }}
+              port: http
+
+            initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
+            failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
+          {{- end }}
+      {{- with .Values.imagePullSecrets }}
+
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+
+            nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+
+      affinity:
+        {{- toYaml .Values.affinity | nindent 8 }}
+
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+
+      {{- end }}

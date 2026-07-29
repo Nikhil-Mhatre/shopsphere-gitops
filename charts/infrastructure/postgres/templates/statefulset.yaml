@@ -1,0 +1,159 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: {{ include "postgres.fullname" . }}
+  labels:
+    {{- include "postgres.labels" . | nindent 4 }}
+
+  {{- with .Values.podAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 8 }}
+  {{- end }}
+
+spec:
+  serviceName: {{ include "postgres.fullname" . }}
+  replicas: {{ .Values.replicaCount }}
+
+  updateStrategy:
+    type: RollingUpdate
+
+  selector:
+    matchLabels:
+      {{- include "postgres.selectorLabels" . | nindent 6 }}
+
+  template:
+    metadata:
+      labels:
+        {{- include "postgres.selectorLabels" . | nindent 8 }}
+
+    spec:
+      serviceAccountName: {{ include "postgres.serviceAccountName" . }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      containers:
+        - name: postgres
+
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+
+          ports:
+            - name: postgres
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (include "postgres.fullname" .) .Values.auth.existingSecret }}
+                  key: POSTGRES_DB
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (include "postgres.fullname" .) .Values.auth.existingSecret }}
+                  key: POSTGRES_USER
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (include "postgres.fullname" .) .Values.auth.existingSecret }}
+                  key: POSTGRES_PASSWORD
+
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  pg_isready \
+                    -h 127.0.0.1 \
+                    -U "$POSTGRES_USER" \
+                    -d "$POSTGRES_DB"
+            initialDelaySeconds: {{ .Values.probes.startup.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.startup.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.startup.timeoutSeconds }}
+            failureThreshold: {{ .Values.probes.startup.failureThreshold }}
+
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  pg_isready \
+                    -h 127.0.0.1 \
+                    -U "$POSTGRES_USER" \
+                    -d "$POSTGRES_DB"
+            initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
+            failureThreshold: {{ .Values.probes.readiness.failureThreshold }}
+
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  pg_isready \
+                    -h 127.0.0.1 \
+                    -U "$POSTGRES_USER" \
+                    -d "$POSTGRES_DB"
+            initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
+            failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
+
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-storage
+
+      spec:
+        accessModes:
+          - ReadWriteOnce
+
+        {{- if .Values.storage.storageClass }}
+        storageClassName: {{ .Values.storage.storageClass | quote }}
+        {{- end }}
+
+        resources:
+          requests:
+            storage: {{ .Values.storage.size }}

@@ -1,7 +1,9 @@
 apiVersion: v2
 name: user-service
-description: User Service Helm Chart
+description: ShopSphere User Service Helm Chart
+
 type: application
 
 version: 0.1.0
+
 appVersion: "1.0.0"

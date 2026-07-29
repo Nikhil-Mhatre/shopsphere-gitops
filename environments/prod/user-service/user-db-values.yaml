@@ -1,0 +1,28 @@
+replicaCount: 1
+
+image:
+  repository: postgres
+  tag: "17.6"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 5432
+
+database:
+  name: user_db
+
+auth:
+  existingSecret: user-db-secret
+
+storage:
+  size: 100Gi
+  storageClass: managed-csi
+
+resources:
+  requests:
+    cpu: "1"
+    memory: 2Gi
+  limits:
+    cpu: "2"
+    memory: 4Gi

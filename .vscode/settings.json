@@ -1,0 +1,19 @@
+{
+  "files.associations": {
+    "**/templates/*.yaml": "helm-template",
+    "**/templates/*.tpl": "helm-template"
+  },
+
+  "[helm-template]": {
+    "editor.formatOnSave": false
+  },
+
+  "[gotmpl]": {
+    "editor.formatOnSave": false
+  },
+
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.formatOnSave": true
+  }
+}
