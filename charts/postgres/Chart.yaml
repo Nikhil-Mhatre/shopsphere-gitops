@@ -1,0 +1,70 @@
+# ------------------------------------------------------------------------------
+# Helm Chart Metadata
+# ------------------------------------------------------------------------------
+#
+# This file contains metadata about the Helm chart.
+#
+# Helm reads this file before rendering any Kubernetes manifests.
+# Unlike values.yaml, this file rarely changes after the chart is created.
+#
+# Official Documentation:
+# https://helm.sh/docs/topics/charts/
+# ------------------------------------------------------------------------------
+
+# Helm Chart API version.
+#
+# apiVersion: v2
+# - Required for Helm 3.
+# - Enables modern Helm chart features.
+apiVersion: v2
+
+# The name of this Helm chart.
+#
+# This should match the chart directory name.
+#
+# Example:
+# charts/postgres
+name: postgres
+
+# A short description explaining the purpose of this chart.
+#
+# This description appears when running:
+#
+#   helm search
+#   helm show chart
+#
+description: A reusable PostgreSQL Helm chart for deploying a single PostgreSQL instance on Kubernetes.
+
+# Chart type.
+#
+# application
+# - Installs Kubernetes resources.
+#
+# library
+# - Contains reusable Helm helper templates only.
+#
+# Since this chart deploys PostgreSQL resources,
+# it is an application chart.
+type: application
+
+# Chart version.
+#
+# This version tracks changes to the Helm chart itself,
+# NOT the PostgreSQL Docker image.
+#
+# Increment this version whenever:
+# - templates change
+# - values.yaml changes
+# - Kubernetes resources change
+#
+version: 0.1.0
+
+# Application version.
+#
+# This represents the PostgreSQL version
+# deployed by this chart.
+#
+# Updating this value does NOT upgrade PostgreSQL.
+# The Docker image tag must also be updated in values.yaml.
+#
+appVersion: "17"

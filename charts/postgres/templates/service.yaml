@@ -1,0 +1,81 @@
+{{- /*
+------------------------------------------------------------------------------
+PostgreSQL Service
+------------------------------------------------------------------------------
+
+This template creates a Kubernetes Service for PostgreSQL.
+
+Why do we need a Service?
+
+Pods are temporary.
+
+A PostgreSQL Pod may be recreated due to:
+
+- Node restart
+- Pod crash
+- Rolling update
+- Kubernetes rescheduling
+
+When this happens, the Pod IP changes.
+
+Applications should NEVER connect directly to a Pod IP.
+
+Instead, they should always connect through the Kubernetes Service.
+
+Example:
+
+postgres://username:password@iam-postgres:5432/iam
+
+Kubernetes automatically resolves:
+
+iam-postgres
+
+to the correct PostgreSQL Pod.
+
+------------------------------------------------------------------------------
+*/ -}}
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  # Service name.
+  #
+  # Example:
+  #
+  # iam-postgres
+  #
+  name: {{ include "postgres.fullname" . }}
+
+  labels:
+    {{- include "postgres.labels" . | nindent 4 }}
+
+spec:
+
+  # Service type.
+  #
+  # Default:
+  # ClusterIP
+  #
+  # PostgreSQL should only be accessible
+  # from inside the Kubernetes cluster.
+  #
+  type: {{ .Values.service.type }}
+
+  ports:
+
+    - name: postgres
+
+      port: {{ .Values.service.port }}
+
+      targetPort: {{ .Values.service.port }}
+
+      protocol: TCP
+
+  # Select the PostgreSQL Pod.
+  #
+  # The labels below must match the labels
+  # defined on the StatefulSet Pod template.
+  #
+  selector:
+    {{- include "postgres.selectorLabels" . | nindent 4 }}
