@@ -1,0 +1,51 @@
+# ------------------------------------------------------------------------------
+# PostgreSQL Development Environment
+# ------------------------------------------------------------------------------
+
+replicaCount: 1
+
+image:
+  repository: postgres
+  tag: "17"
+  pullPolicy: IfNotPresent
+
+database:
+  name: iam
+  username: postgres
+  password: change-me
+
+service:
+  type: ClusterIP
+  port: 5432
+
+storage:
+  size: 5Gi
+  storageClassName: ""
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+probes:
+  startup:
+    failureThreshold: 30
+    periodSeconds: 10
+
+  readiness:
+    initialDelaySeconds: 10
+    periodSeconds: 10
+
+  liveness:
+    initialDelaySeconds: 30
+    periodSeconds: 20
+
+nodeSelector: {}
+
+affinity: {}
+
+tolerations: []

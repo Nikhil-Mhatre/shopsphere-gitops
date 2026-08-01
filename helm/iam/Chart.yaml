@@ -1,0 +1,79 @@
+# ------------------------------------------------------------------------------
+# Helm Chart Metadata
+# ------------------------------------------------------------------------------
+#
+# This file contains metadata about the IAM Helm chart.
+#
+# Helm reads this file before rendering any Kubernetes manifests.
+#
+# Unlike values.yaml, this file rarely changes after the chart
+# has been created.
+#
+# Official Documentation:
+# https://helm.sh/docs/topics/charts/
+#
+# ------------------------------------------------------------------------------
+
+# Helm Chart API version.
+#
+# apiVersion: v2
+# - Required for Helm 3.
+# - Enables modern Helm chart features.
+#
+apiVersion: v2
+
+# Name of this Helm chart.
+#
+# This should match the chart directory name.
+#
+# Example:
+#
+# charts/iam
+#
+name: iam
+
+# Short description displayed by Helm commands such as:
+#
+#   helm search
+#   helm show chart
+#
+description: A reusable Helm chart for deploying the IAM microservice on Kubernetes.
+
+# Helm chart type.
+#
+# application
+# - Deploys Kubernetes resources.
+#
+# library
+# - Contains reusable helper templates only.
+#
+# Since this chart deploys an application,
+# it is an application chart.
+#
+type: application
+
+# Helm chart version.
+#
+# This version tracks changes to the Helm chart itself.
+#
+# Increment this version whenever:
+#
+# - Kubernetes templates change
+# - values.yaml changes
+# - Helm helper templates change
+#
+# This version is NOT related to the Docker image version.
+#
+version: 0.1.0
+
+# Application version.
+#
+# Represents the version of the IAM application
+# that this chart is intended to deploy.
+#
+# This value is informational only.
+#
+# The Docker image tag is configured separately
+# inside values.yaml.
+#
+appVersion: "1.0.0"

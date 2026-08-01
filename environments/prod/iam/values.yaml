@@ -1,0 +1,83 @@
+# ------------------------------------------------------------------------------
+# IAM Production Environment
+# ------------------------------------------------------------------------------
+#
+# This file overrides the default IAM Helm chart values for the
+# production environment.
+#
+# Only values that differ from the chart defaults should be defined here.
+#
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
+# Docker Image
+# ------------------------------------------------------------------------------
+
+image:
+
+  # GitHub Actions updates this tag automatically
+  # after every production release.
+  #
+  tag: "1.0.0"
+
+# ------------------------------------------------------------------------------
+# Deployment
+# ------------------------------------------------------------------------------
+
+# Increase replicas for higher availability.
+#
+replicaCount: 2
+
+# ------------------------------------------------------------------------------
+# Application Configuration
+# ------------------------------------------------------------------------------
+
+application:
+
+  environment: production
+
+  logLevel: info
+
+# ------------------------------------------------------------------------------
+# Database
+# ------------------------------------------------------------------------------
+
+database:
+
+  host: iam-postgres
+
+  name: iam
+
+  username: postgres
+
+  password: replace-with-secure-password
+
+  logQueries: false
+
+# ------------------------------------------------------------------------------
+# Resource Requests & Limits
+# ------------------------------------------------------------------------------
+
+resources:
+
+  requests:
+
+    cpu: 250m
+
+    memory: 256Mi
+
+  limits:
+
+    cpu: "1"
+
+    memory: 512Mi
+
+# ------------------------------------------------------------------------------
+# Service Account
+# ------------------------------------------------------------------------------
+
+serviceAccount:
+
+  create: true
+
+  automountServiceAccountToken: false

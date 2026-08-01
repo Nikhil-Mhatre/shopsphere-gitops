@@ -1,0 +1,257 @@
+# ------------------------------------------------------------------------------
+# IAM Helm Chart Configuration
+# ------------------------------------------------------------------------------
+#
+# This file contains all configurable values for the IAM microservice.
+#
+# Helm combines these values with the templates inside the templates/
+# directory to generate Kubernetes manifests.
+#
+# Environment-specific values should be overridden from:
+#
+#   dev/iam/values.yaml
+#   prod/iam/values.yaml
+#
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
+# Deployment Configuration
+# ------------------------------------------------------------------------------
+
+# Number of application Pods.
+#
+# Increase this value to scale the application horizontally.
+#
+replicaCount: 1
+
+# ------------------------------------------------------------------------------
+# Docker Image
+# ------------------------------------------------------------------------------
+
+image:
+
+  # Docker image repository.
+  #
+  # Example:
+  #
+  # docker.io/your-org/iam
+  #
+  repository: nikhilmhatre0317/shopsphere-user-service
+
+  # Docker image tag.
+  #
+  # GitHub Actions automatically updates this value
+  # inside the GitOps repository after a successful build.
+  #
+  tag: latest
+
+  # Image pull policy.
+  #
+  # Always
+  # IfNotPresent
+  # Never
+  #
+  pullPolicy: IfNotPresent
+
+# ------------------------------------------------------------------------------
+# Application Configuration
+# ------------------------------------------------------------------------------
+
+application:
+
+  # Application environment.
+  #
+  # development
+  # production
+  #
+  environment: development
+
+  # Service name.
+  #
+  # Used by the application for logging,
+  # metrics and observability.
+  #
+  name: iam
+
+  # Application version.
+  #
+  # Informational only.
+  #
+  # The Docker image tag controls
+  # the actual application version.
+  #
+  version: "1.0.0"
+
+  # Application host.
+  #
+  # Kubernetes Pods should listen on
+  # every available network interface.
+  #
+  host: 0.0.0.0
+
+  # Application port.
+  #
+  port: 3000
+
+  # Logging level.
+  #
+  # trace
+  # debug
+  # info
+  # warn
+  # error
+  # fatal
+  #
+  logLevel: info
+
+# ------------------------------------------------------------------------------
+# Kubernetes Service
+# ------------------------------------------------------------------------------
+
+service:
+
+  # Service type.
+  #
+  # ClusterIP is recommended because
+  # application traffic remains inside
+  # the Kubernetes cluster.
+  #
+  type: ClusterIP
+
+  # Service port.
+  #
+  port: 3000
+
+# ------------------------------------------------------------------------------
+# PostgreSQL Database
+# ------------------------------------------------------------------------------
+
+database:
+
+  # PostgreSQL Service name.
+  #
+  # This is the Kubernetes Service created
+  # by the PostgreSQL Helm chart.
+  #
+  host: iam-postgres
+
+  # PostgreSQL Service port.
+  #
+  port: 5432
+
+  # Database name.
+  #
+  name: iam
+
+  # Database username.
+  #
+  username: postgres
+
+  # Database password.
+  #
+  # Never commit production credentials.
+  # Override this value inside:
+  #
+  # prod/iam/values.yaml
+  #
+  password: change-me
+
+  # Database connection timeout.
+  #
+  connectTimeoutMs: 10000
+
+  # Enable Prisma query logging.
+  #
+  logQueries: false
+
+# ------------------------------------------------------------------------------
+# Resource Requests & Limits
+# ------------------------------------------------------------------------------
+
+resources:
+
+  requests:
+
+    cpu: 100m
+
+    memory: 128Mi
+
+  limits:
+
+    cpu: 500m
+
+    memory: 512Mi
+
+# ------------------------------------------------------------------------------
+# Health Probes
+# ------------------------------------------------------------------------------
+
+probes:
+
+  startup:
+
+    path: /api/v1/health
+
+    failureThreshold: 30
+
+    periodSeconds: 10
+
+  readiness:
+
+    path: /api/v1/health
+
+    initialDelaySeconds: 10
+
+    periodSeconds: 10
+
+  liveness:
+
+    path: /api/v1/health
+
+    initialDelaySeconds: 30
+
+    periodSeconds: 20
+
+# ------------------------------------------------------------------------------
+# Service Account
+# ------------------------------------------------------------------------------
+
+serviceAccount:
+
+  # Create a dedicated ServiceAccount.
+  #
+  create: true
+
+# ------------------------------------------------------------------------------
+# Ingress
+# ------------------------------------------------------------------------------
+
+ingress:
+
+  # Enable Ingress resource.
+  #
+  enabled: false
+
+# ------------------------------------------------------------------------------
+# Pod Scheduling
+# ------------------------------------------------------------------------------
+
+# Schedule Pods onto specific nodes.
+#
+# Leave empty unless your cluster
+# requires custom scheduling.
+#
+nodeSelector: {}
+
+# Pod affinity rules.
+#
+# Leave empty for most deployments.
+#
+affinity: {}
+
+# Kubernetes tolerations.
+#
+# Leave empty unless your cluster
+# uses taints.
+#
+tolerations: []
