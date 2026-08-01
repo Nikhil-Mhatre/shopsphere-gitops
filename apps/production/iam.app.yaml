@@ -1,0 +1,71 @@
+# ------------------------------------------------------------------------------
+# Argo CD Application
+# ------------------------------------------------------------------------------
+#
+# Deploys the IAM Helm chart to the Production environment.
+#
+# ------------------------------------------------------------------------------
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+
+  # Application name displayed in the Argo CD UI.
+  #
+  name: iam-production
+
+  namespace: argocd
+
+spec:
+
+  project: default
+
+  # --------------------------------------------------------------------------
+  # Source Repository
+  # --------------------------------------------------------------------------
+
+  source:
+
+    repoURL: https://github.com/Nikhil-Mhatre/shopsphere-gitops.git
+
+    targetRevision: main
+
+    path: charts/iam
+
+    helm:
+
+      # Stable Helm release name.
+      #
+      releaseName: iam
+
+      # Production configuration.
+      #
+      valueFiles:
+        - ../../environments/production/iam.values.yaml
+
+  # --------------------------------------------------------------------------
+  # Destination Cluster
+  # --------------------------------------------------------------------------
+
+  destination:
+
+    server: https://kubernetes.default.svc
+
+    namespace: production
+
+  # --------------------------------------------------------------------------
+  # Synchronization Policy
+  # --------------------------------------------------------------------------
+
+  syncPolicy:
+
+    automated:
+
+      prune: true
+
+      selfHeal: true
+
+    syncOptions:
+
+      - CreateNamespace=true

@@ -1,0 +1,101 @@
+# ------------------------------------------------------------------------------
+# Argo CD Root Application
+# ------------------------------------------------------------------------------
+#
+# This is the root (App of Apps) application for the Production
+# environment.
+#
+# Purpose
+# -------
+#
+# This application does NOT deploy Kubernetes workloads directly.
+#
+# Instead, it deploys and manages all Argo CD Applications located in:
+#
+#   apps/production/
+#
+# Each child Application is responsible for deploying a single
+# microservice or infrastructure component.
+#
+# Production Environment
+#
+# ├── postgres-production
+# ├── iam-production
+# ├── catalog-production      (future)
+# ├── order-production        (future)
+# └── ...
+#
+# Benefits
+# --------
+#
+# • Bootstrap the entire production environment with one command.
+# • Automatically discover newly added production applications.
+# • Keep Argo CD configuration separate from Helm charts.
+# • Follow GitOps best practices.
+#
+# ------------------------------------------------------------------------------
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+
+  # Name displayed in the Argo CD UI.
+  #
+  name: production
+
+  # Namespace where Argo CD is installed.
+  #
+  namespace: argocd
+
+spec:
+
+  # Argo CD Project.
+  #
+  project: default
+
+  # --------------------------------------------------------------------------
+  # Source Repository
+  # --------------------------------------------------------------------------
+
+  source:
+
+    # GitOps repository.
+    #
+    repoURL: https://github.com/Nikhil-Mhatre/shopsphere-gitops.git
+
+    # Git branch to monitor.
+    #
+    targetRevision: main
+
+    # Directory containing all Production Applications.
+    #
+    path: apps/production
+
+  # --------------------------------------------------------------------------
+  # Destination Cluster
+  # --------------------------------------------------------------------------
+
+  destination:
+
+    # Deploy child Applications into the Argo CD namespace.
+    #
+    server: https://kubernetes.default.svc
+
+    namespace: argocd
+
+  # --------------------------------------------------------------------------
+  # Synchronization Policy
+  # --------------------------------------------------------------------------
+
+  syncPolicy:
+
+    automated:
+
+      # Remove child Applications that no longer exist in Git.
+      #
+      prune: true
+
+      # Restore Applications that have been modified manually.
+      #
+      selfHeal: true

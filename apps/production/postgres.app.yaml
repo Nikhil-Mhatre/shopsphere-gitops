@@ -1,0 +1,85 @@
+# ------------------------------------------------------------------------------
+# Argo CD Application
+# ------------------------------------------------------------------------------
+#
+# Deploys the PostgreSQL Helm chart to the Production environment.
+#
+# This Application continuously monitors the GitOps repository and ensures
+# the production PostgreSQL deployment matches the desired state stored in Git.
+#
+# ------------------------------------------------------------------------------
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  # Application name displayed in the Argo CD UI.
+  #
+  name: postgres-production
+
+  # Namespace where Argo CD is installed.
+  #
+  namespace: argocd
+
+spec:
+
+  # Argo CD project.
+  #
+  project: default
+
+  # --------------------------------------------------------------------------
+  # Source Repository
+  # --------------------------------------------------------------------------
+
+  source:
+
+    # GitOps repository.
+    #
+    repoURL: https://github.com/Nikhil-Mhatre/shopsphere-gitops.git
+
+    # Git branch to monitor.
+    #
+    targetRevision: main
+
+    # PostgreSQL Helm chart.
+    #
+    path: charts/postgres
+
+    helm:
+
+      # Stable Helm release name.
+      #
+      releaseName: postgres
+
+      # Production configuration.
+      #
+      valueFiles:
+        - ../../environments/production/postgres.values.yaml
+
+  # --------------------------------------------------------------------------
+  # Destination Cluster
+  # --------------------------------------------------------------------------
+
+  destination:
+
+    server: https://kubernetes.default.svc
+
+    # Dedicated production namespace.
+    #
+    namespace: production
+
+  # --------------------------------------------------------------------------
+  # Synchronization Policy
+  # --------------------------------------------------------------------------
+
+  syncPolicy:
+
+    automated:
+
+      prune: true
+
+      selfHeal: true
+
+    syncOptions:
+
+      - CreateNamespace=true
