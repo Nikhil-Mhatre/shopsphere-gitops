@@ -1,0 +1,121 @@
+# ------------------------------------------------------------------------------
+# Argo CD Application
+# ------------------------------------------------------------------------------
+#
+# This Application deploys the PostgreSQL Helm chart into the
+# development environment.
+#
+# Argo CD continuously monitors the GitOps repository.
+#
+# Whenever this file, the Helm chart, or the development values file
+# changes, Argo CD synchronizes the Kubernetes cluster so that it
+# matches the desired state stored in Git.
+#
+# ------------------------------------------------------------------------------
+#
+# Repository
+#   ShopSphere-GitOps
+#
+# Helm Chart
+#   charts/postgres
+#
+# Environment
+#   Development
+#
+# Namespace
+#   iam
+#
+# Values File
+#   dev/postgres/values.yaml
+#
+# ------------------------------------------------------------------------------
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  # Name displayed inside the Argo CD UI.
+  #
+  # Example:
+  #
+  # postgres-dev
+  #
+  name: postgres-dev
+
+  # Namespace where Argo CD is installed.
+  #
+  namespace: argocd
+
+spec:
+
+  # Project this application belongs to.
+  #
+  # The "default" project is sufficient
+  # for this project.
+  #
+  project: default
+
+  # --------------------------------------------------------------------------
+  # Source Repository
+  # --------------------------------------------------------------------------
+
+  source:
+
+    # Git repository containing the Helm chart.
+    #
+    repoURL: https://github.com/Nikhil-Mhatre/shopsphere-gitops.git
+
+    # Git branch to monitor.
+    #
+    targetRevision: main
+
+    # Path to the Helm chart.
+    #
+    path: helm/postgres
+
+    helm:
+
+      # Environment-specific values file.
+      #
+      valueFiles:
+
+        - ../../environments/dev/postgres/values.yaml
+
+  # --------------------------------------------------------------------------
+  # Destination Cluster
+  # --------------------------------------------------------------------------
+
+  destination:
+
+    # Deploy to the local Kubernetes cluster.
+    #
+    server: https://kubernetes.default.svc
+
+    # Kubernetes namespace.
+    #
+    namespace: iam
+
+  # --------------------------------------------------------------------------
+  # Synchronization Policy
+  # --------------------------------------------------------------------------
+
+  syncPolicy:
+
+    automated:
+
+      # Automatically remove Kubernetes resources
+      # that no longer exist in Git.
+      #
+      prune: true
+
+      # Automatically restore resources if they
+      # are modified manually.
+      #
+      selfHeal: true
+
+    # Automatically create the destination
+    # namespace if it does not exist.
+    #
+    syncOptions:
+
+      - CreateNamespace=true

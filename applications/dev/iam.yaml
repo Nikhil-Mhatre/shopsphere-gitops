@@ -2,7 +2,7 @@
 # Argo CD Application
 # ------------------------------------------------------------------------------
 #
-# This Application deploys the PostgreSQL Helm chart into the
+# This Application deploys the IAM Helm chart into the
 # development environment.
 #
 # Argo CD continuously monitors the GitOps repository.
@@ -17,7 +17,7 @@
 #   ShopSphere-GitOps
 #
 # Helm Chart
-#   charts/postgres
+#   charts/iam
 #
 # Environment
 #   Development
@@ -26,7 +26,7 @@
 #   iam
 #
 # Values File
-#   dev/postgres/values.yaml
+#   dev/iam/values.yaml
 #
 # ------------------------------------------------------------------------------
 
@@ -38,9 +38,9 @@ metadata:
   #
   # Example:
   #
-  # postgres-dev
+  # iam-dev
   #
-  name: postgres-dev
+  name: iam-dev
 
   # Namespace where Argo CD is installed.
   #
@@ -48,10 +48,7 @@ metadata:
 
 spec:
 
-  # Project this application belongs to.
-  #
-  # The "default" project is sufficient
-  # for this project.
+  # Argo CD Project.
   #
   project: default
 
@@ -71,7 +68,7 @@ spec:
 
     # Path to the Helm chart.
     #
-    path: helm/postgres
+    path: helm/iam
 
     helm:
 
@@ -79,7 +76,7 @@ spec:
       #
       valueFiles:
 
-        - ./values.yaml
+        - ../../environments/dev/iam/values.yaml
 
   # --------------------------------------------------------------------------
   # Destination Cluster
@@ -87,7 +84,7 @@ spec:
 
   destination:
 
-    # Deploy to the local Kubernetes cluster.
+    # Deploy to the in-cluster Kubernetes API.
     #
     server: https://kubernetes.default.svc
 
@@ -103,19 +100,19 @@ spec:
 
     automated:
 
-      # Automatically remove Kubernetes resources
-      # that no longer exist in Git.
+      # Remove Kubernetes resources that
+      # no longer exist in Git.
       #
       prune: true
 
-      # Automatically restore resources if they
-      # are modified manually.
+      # Restore resources if they are
+      # modified manually.
       #
       selfHeal: true
 
-    # Automatically create the destination
-    # namespace if it does not exist.
-    #
     syncOptions:
 
+      # Automatically create the namespace
+      # if it does not exist.
+      #
       - CreateNamespace=true
