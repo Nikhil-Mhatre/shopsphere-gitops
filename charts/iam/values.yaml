@@ -133,7 +133,7 @@ database:
   # This is the Kubernetes Service created
   # by the PostgreSQL Helm chart.
   #
-  host: iam-postgres
+  host: postgres
 
   # PostgreSQL Service port.
   #
