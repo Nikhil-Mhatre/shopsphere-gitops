@@ -75,7 +75,7 @@ spec:
 
     # Check recursively into folders
     directory:
-      recursive: true
+      recurse: true
 
   # --------------------------------------------------------------------------
   # Destination Cluster
