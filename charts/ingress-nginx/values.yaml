@@ -1,0 +1,87 @@
+# ------------------------------------------------------------------------------
+# NGINX Ingress Controller
+# Default Helm Values
+# ------------------------------------------------------------------------------
+#
+# Purpose
+# -------
+#
+# This file contains the default configuration shared by every
+# environment.
+#
+# Environment-specific configuration belongs in:
+#
+# environments/
+# ├── development/
+# │   └── ingress-nginx.values.yaml
+# └── production/
+#     └── ingress-nginx.values.yaml
+#
+# Keep this file as small as possible.
+# Only add settings that are common across all environments.
+#
+# ------------------------------------------------------------------------------
+
+controller:
+
+  # --------------------------------------------------------------------------
+  # Replica Configuration
+  # --------------------------------------------------------------------------
+
+  # Number of NGINX Ingress Controller Pods.
+  #
+  # Development and Production environments may override this value.
+  #
+  replicaCount: 1
+
+  # --------------------------------------------------------------------------
+  # Kubernetes Service
+  # --------------------------------------------------------------------------
+
+  service:
+
+    # Service type used to expose the controller.
+    #
+    # Development:
+    #   LoadBalancer (Docker Desktop)
+    #
+    # Production:
+    #   LoadBalancer (Cloud Provider)
+    #
+    type: LoadBalancer
+
+  # --------------------------------------------------------------------------
+  # Admission Webhooks
+  # --------------------------------------------------------------------------
+
+  admissionWebhooks:
+
+    # Validate Ingress resources before Kubernetes
+    # stores them in the cluster.
+    #
+    enabled: true
+
+  # --------------------------------------------------------------------------
+  # Metrics
+  # --------------------------------------------------------------------------
+
+  metrics:
+
+    # Prometheus integration.
+    #
+    # Disabled until the monitoring stack is added.
+    #
+    enabled: false
+
+# ------------------------------------------------------------------------------
+# Default Backend
+# ------------------------------------------------------------------------------
+
+defaultBackend:
+
+  # Install the optional default backend.
+  #
+  # Disabled because ShopSphere applications define
+  # their own Ingress resources.
+  #
+  enabled: false

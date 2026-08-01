@@ -1,0 +1,76 @@
+# ------------------------------------------------------------------------------
+# Helm Chart Metadata
+# ------------------------------------------------------------------------------
+#
+# Chart Name
+# ----------
+#
+# ingress-nginx
+#
+# Purpose
+# -------
+#
+# This chart is a lightweight wrapper around the official
+# Kubernetes Ingress-NGINX Helm chart.
+#
+# We intentionally keep this wrapper inside our GitOps repository so that
+# every application follows the same deployment pattern:
+#
+#   GitOps Repository
+#       │
+#       ├── charts/
+#       ├── environments/
+#       └── apps/
+#
+# Instead of using Argo CD's multi-source feature, this chart declares the
+# official Ingress-NGINX chart as a dependency. This keeps the repository
+# structure simple and easy for junior DevOps engineers to understand.
+#
+# Upgrading the Ingress Controller only requires changing the dependency
+# version below.
+#
+# ------------------------------------------------------------------------------
+
+apiVersion: v2
+
+# Name of this wrapper chart.
+#
+name: ingress-nginx
+
+# Human-readable description.
+#
+description: >
+  Wrapper Helm chart for deploying the official Kubernetes
+  Ingress-NGINX Controller.
+
+# Helm chart type.
+#
+type: application
+
+# Version of this wrapper chart.
+#
+# Increment when this chart changes.
+#
+version: 1.0.0
+
+# Version of the deployed application.
+#
+# This mirrors the upstream Ingress-NGINX chart version.
+#
+appVersion: "4.13.2"
+
+# ------------------------------------------------------------------------------
+# Chart Dependencies
+# ------------------------------------------------------------------------------
+
+dependencies:
+
+  - name: ingress-nginx
+
+    # Official Helm repository.
+    #
+    repository: https://kubernetes.github.io/ingress-nginx
+
+    # Upstream chart version.
+    #
+    version: "4.13.2"

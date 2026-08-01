@@ -1,13 +1,13 @@
 # ------------------------------------------------------------------------------
 # NGINX Ingress Controller
-# Development Environment Configuration
+# Production Environment Configuration
 # ------------------------------------------------------------------------------
 #
 # Purpose
 # -------
 #
 # This file contains configuration that is specific to the
-# Development environment.
+# Production environment.
 #
 # Values defined here override the defaults in:
 #
@@ -24,9 +24,9 @@ controller:
   # Replica Configuration
   # --------------------------------------------------------------------------
 
-  # A single controller Pod is sufficient for local development.
+  # Run multiple controller Pods to improve availability.
   #
-  replicaCount: 1
+  replicaCount: 2
 
   # --------------------------------------------------------------------------
   # Kubernetes Service
@@ -34,7 +34,36 @@ controller:
 
   service:
 
-    # Docker Desktop supports the LoadBalancer service type,
-    # making the Ingress Controller accessible from the host machine.
+    # Production clusters typically expose the Ingress Controller
+    # through a cloud provider's external LoadBalancer.
     #
     type: LoadBalancer
+
+  # --------------------------------------------------------------------------
+  # Resource Management
+  # --------------------------------------------------------------------------
+
+  resources:
+
+    requests:
+
+      cpu: 100m
+
+      memory: 128Mi
+
+    limits:
+
+      cpu: 500m
+
+      memory: 512Mi
+
+  # --------------------------------------------------------------------------
+  # Metrics
+  # --------------------------------------------------------------------------
+
+  metrics:
+
+    # Enable metrics so they can be collected by
+    # Prometheus when a monitoring stack is added.
+    #
+    enabled: true

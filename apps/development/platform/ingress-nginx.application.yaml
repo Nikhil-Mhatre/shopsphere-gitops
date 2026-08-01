@@ -4,26 +4,30 @@
 #
 # Deploys the NGINX Ingress Controller into the Development environment.
 #
-# The NGINX Ingress Controller is responsible for routing incoming HTTP/HTTPS
-# traffic to the correct Kubernetes Service based on the request hostname
-# or URL path.
+# The NGINX Ingress Controller acts as the entry point for all incoming
+# HTTP/HTTPS traffic into the Kubernetes cluster.
 #
 # Example
 #
-#                https://api.shopsphere.local
-#                           │
-#                           ▼
+#                 http://api.shopsphere.local
+#                            │
+#                            ▼
 #                 NGINX Ingress Controller
-#                           │
-#        ┌──────────────────┼──────────────────┐
-#        ▼                  ▼                  ▼
-#  /api/v1/auth      /api/v1/catalog    /api/v1/orders
-#        │                  │                  │
-#        ▼                  ▼                  ▼
-#       IAM              Catalog            Orders
+#                            │
+#        ┌───────────────────┼───────────────────┐
+#        ▼                   ▼                   ▼
+#   /api/v1/auth      /api/v1/catalog     /api/v1/orders
+#        │                   │                   │
+#        ▼                   ▼                   ▼
+#       IAM               Catalog             Orders
 #
-# This Application uses the official Helm chart maintained by the
-# Kubernetes Ingress-NGINX project.
+# This Application deploys the local wrapper Helm chart located in:
+#
+#   charts/ingress-nginx
+#
+# Environment-specific configuration is loaded from:
+#
+#   environments/development/ingress-nginx.values.yaml
 #
 # ------------------------------------------------------------------------------
 
@@ -32,7 +36,7 @@ kind: Application
 
 metadata:
 
-  # Application name displayed in the Argo CD UI.
+  # Name displayed in the Argo CD UI.
   #
   name: ingress-nginx-development
 
@@ -47,24 +51,22 @@ spec:
   project: default
 
   # --------------------------------------------------------------------------
-  # Helm Chart Source
+  # Source Repository
   # --------------------------------------------------------------------------
 
   source:
 
-    # Official Helm repository.
+    # GitOps repository.
     #
-    repoURL: https://kubernetes.github.io/ingress-nginx
+    repoURL: https://github.com/Nikhil-Mhatre/shopsphere-gitops.git
 
-    # Helm chart name.
+    # Git branch to monitor.
     #
-    chart: ingress-nginx
+    targetRevision: main
 
-    # Helm chart version.
+    # Path to the wrapper Helm chart.
     #
-    # Pinning the version ensures predictable deployments.
-    #
-    targetRevision: "4.13.2"
+    path: charts/ingress-nginx
 
     helm:
 
@@ -72,23 +74,11 @@ spec:
       #
       releaseName: ingress-nginx
 
-      # Environment-specific values file stored
-      # in the GitOps repository.
+      # Development environment values.
       #
-      valuesFiles:
-        - $values/environments/development/ingress-nginx.values.yaml
+      valueFiles:
 
-  # --------------------------------------------------------------------------
-  # Additional Git Repository
-  # --------------------------------------------------------------------------
-
-  sources:
-
-    - repoURL: https://github.com/Nikhil-Mhatre/shopsphere-gitops.git
-
-      targetRevision: main
-
-      ref: values
+        - ../../environments/development/ingress-nginx.values.yaml
 
   # --------------------------------------------------------------------------
   # Destination Cluster
@@ -96,11 +86,12 @@ spec:
 
   destination:
 
-    # Deploy into the local Kubernetes cluster.
+    # Kubernetes API server.
     #
     server: https://kubernetes.default.svc
 
-    # Dedicated namespace for the controller.
+    # Namespace where the Ingress Controller
+    # will be installed.
     #
     namespace: ingress-nginx
 
@@ -112,17 +103,17 @@ spec:
 
     automated:
 
-      # Remove resources that no longer exist
-      # in the desired state.
+      # Remove resources that no longer exist in Git.
       #
       prune: true
 
-      # Restore resources modified manually.
+      # Restore manually modified resources.
       #
       selfHeal: true
 
     syncOptions:
 
-      # Automatically create the namespace.
+      # Automatically create the namespace if it
+      # does not already exist.
       #
       - CreateNamespace=true
