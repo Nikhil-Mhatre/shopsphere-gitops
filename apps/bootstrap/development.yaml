@@ -13,7 +13,7 @@
 # Instead, it deploys and manages the child Argo CD Applications found
 # under:
 #
-#   applications/development/
+#   apps/development
 #
 # Those child Applications are responsible for deploying individual
 # microservices and infrastructure components.
@@ -71,7 +71,7 @@ spec:
 
     # Directory containing all Development Applications.
     #
-    path: applications/development
+    path: apps/development
 
   # --------------------------------------------------------------------------
   # Destination Cluster

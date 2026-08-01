@@ -71,7 +71,7 @@ spec:
 
     # Path to the Helm chart.
     #
-    path: chart/postgres
+    path: charts/postgres
 
     helm:
 
