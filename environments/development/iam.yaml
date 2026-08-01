@@ -62,7 +62,8 @@ serviceAccount:
   automountServiceAccountToken: false
 
 ingress:
-  enabled: false
+  enabled: true
+  host: api.shopsphere.local
 
 nodeSelector: {}
 

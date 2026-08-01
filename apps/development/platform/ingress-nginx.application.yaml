@@ -1,0 +1,128 @@
+# ------------------------------------------------------------------------------
+# Argo CD Application
+# ------------------------------------------------------------------------------
+#
+# Deploys the NGINX Ingress Controller into the Development environment.
+#
+# The NGINX Ingress Controller is responsible for routing incoming HTTP/HTTPS
+# traffic to the correct Kubernetes Service based on the request hostname
+# or URL path.
+#
+# Example
+#
+#                https://api.shopsphere.local
+#                           │
+#                           ▼
+#                 NGINX Ingress Controller
+#                           │
+#        ┌──────────────────┼──────────────────┐
+#        ▼                  ▼                  ▼
+#  /api/v1/auth      /api/v1/catalog    /api/v1/orders
+#        │                  │                  │
+#        ▼                  ▼                  ▼
+#       IAM              Catalog            Orders
+#
+# This Application uses the official Helm chart maintained by the
+# Kubernetes Ingress-NGINX project.
+#
+# ------------------------------------------------------------------------------
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+
+  # Application name displayed in the Argo CD UI.
+  #
+  name: ingress-nginx-development
+
+  # Namespace where Argo CD is installed.
+  #
+  namespace: argocd
+
+spec:
+
+  # Argo CD Project.
+  #
+  project: default
+
+  # --------------------------------------------------------------------------
+  # Helm Chart Source
+  # --------------------------------------------------------------------------
+
+  source:
+
+    # Official Helm repository.
+    #
+    repoURL: https://kubernetes.github.io/ingress-nginx
+
+    # Helm chart name.
+    #
+    chart: ingress-nginx
+
+    # Helm chart version.
+    #
+    # Pinning the version ensures predictable deployments.
+    #
+    targetRevision: "4.13.2"
+
+    helm:
+
+      # Stable Helm release name.
+      #
+      releaseName: ingress-nginx
+
+      # Environment-specific values file stored
+      # in the GitOps repository.
+      #
+      valuesFiles:
+        - $values/environments/development/ingress-nginx.values.yaml
+
+  # --------------------------------------------------------------------------
+  # Additional Git Repository
+  # --------------------------------------------------------------------------
+
+  sources:
+
+    - repoURL: https://github.com/Nikhil-Mhatre/shopsphere-gitops.git
+
+      targetRevision: main
+
+      ref: values
+
+  # --------------------------------------------------------------------------
+  # Destination Cluster
+  # --------------------------------------------------------------------------
+
+  destination:
+
+    # Deploy into the local Kubernetes cluster.
+    #
+    server: https://kubernetes.default.svc
+
+    # Dedicated namespace for the controller.
+    #
+    namespace: ingress-nginx
+
+  # --------------------------------------------------------------------------
+  # Synchronization Policy
+  # --------------------------------------------------------------------------
+
+  syncPolicy:
+
+    automated:
+
+      # Remove resources that no longer exist
+      # in the desired state.
+      #
+      prune: true
+
+      # Restore resources modified manually.
+      #
+      selfHeal: true
+
+    syncOptions:
+
+      # Automatically create the namespace.
+      #
+      - CreateNamespace=true

@@ -1,0 +1,74 @@
+{{- /*
+------------------------------------------------------------------------------
+IAM Ingress
+------------------------------------------------------------------------------
+
+This template creates a Kubernetes Ingress resource.
+
+An Ingress exposes the IAM Service outside the Kubernetes cluster.
+
+Incoming requests are received by the NGINX Ingress Controller and
+forwarded to the IAM Service.
+
+Example
+
+                https://api.shopsphere.local
+                           │
+                           ▼
+                 NGINX Ingress Controller
+                           │
+                           ▼
+                    IAM Kubernetes Service
+                           │
+                           ▼
+                        IAM Pod
+
+This template is created only when Ingress is enabled.
+
+------------------------------------------------------------------------------
+*/ -}}
+
+{{- if .Values.ingress.enabled }}
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+
+  # Name of the Ingress resource.
+  #
+  name: {{ include "iam.fullname" . }}
+
+  labels:
+    {{- include "iam.labels" . | nindent 4 }}
+
+spec:
+
+  # Ingress Controller that should process
+  # this resource.
+  #
+  ingressClassName: {{ .Values.ingress.className }}
+
+  rules:
+
+    - host: {{ .Values.ingress.host }}
+
+      http:
+
+        paths:
+
+          - path: {{ .Values.ingress.path.prefix }}/{{ .Values.ingress.path.service }}
+
+            pathType: Prefix
+
+            backend:
+
+              service:
+
+                name: {{ include "iam.fullname" . }}
+
+                port:
+
+                  number: {{ .Values.service.port }}
+
+{{- end }}

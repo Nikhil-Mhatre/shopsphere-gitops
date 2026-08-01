@@ -223,14 +223,33 @@ serviceAccount:
   create: true
 
 # ------------------------------------------------------------------------------
-# Ingress
+# Ingress Configuration
 # ------------------------------------------------------------------------------
 
 ingress:
 
-  # Enable Ingress resource.
+  # Enable or disable the Kubernetes Ingress.
   #
   enabled: false
+
+  # Name of the Ingress Controller.
+  #
+  className: nginx
+
+  # Public hostname.
+  #
+  # Development:
+  #   api.shopsphere.local
+  #
+  # Production:
+  #   api.shopsphere.com
+  #
+  host: api.shopsphere.local
+
+  # URL path handled by the IAM Service.
+  path:
+    prefix: /api/v1
+    service: auth
 
 # ------------------------------------------------------------------------------
 # Pod Scheduling

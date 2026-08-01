@@ -79,3 +79,10 @@ serviceAccount:
   create: true
 
   automountServiceAccountToken: false
+
+# ------------------------------------------------------------------------------
+# Ingress
+# ------------------------------------------------------------------------------
+ingress:
+  enabled: true
+  host: api.shopsphere.com

@@ -1,0 +1,76 @@
+# ------------------------------------------------------------------------------
+# NGINX Ingress Controller
+# Development Environment Configuration
+# ------------------------------------------------------------------------------
+#
+# This file contains the Development environment configuration for the
+# NGINX Ingress Controller.
+#
+# The NGINX Ingress Controller is responsible for routing incoming HTTP
+# requests to the correct Kubernetes Service.
+#
+# Example
+#
+#                  http://api.shopsphere.local
+#                             │
+#                             ▼
+#                   NGINX Ingress Controller
+#                             │
+#           ┌─────────────────┼─────────────────┐
+#           ▼                 ▼                 ▼
+#      /api/v1/auth     /api/v1/catalog    /api/v1/orders
+#           │                 │                 │
+#           ▼                 ▼                 ▼
+#          IAM            Catalog            Orders
+#
+# ------------------------------------------------------------------------------
+
+controller:
+
+  # Number of controller Pods.
+  #
+  # A single replica is sufficient for local
+  # development.
+  #
+  replicaCount: 1
+
+  # --------------------------------------------------------------------------
+  # Service
+  # --------------------------------------------------------------------------
+
+  service:
+
+    # Expose the controller using a LoadBalancer.
+    #
+    # Docker Desktop automatically provisions
+    # a local LoadBalancer.
+    #
+    type: LoadBalancer
+
+  # --------------------------------------------------------------------------
+  # Admission Webhooks
+  # --------------------------------------------------------------------------
+
+  admissionWebhooks:
+
+    # Validate Ingress resources before they
+    # are accepted by Kubernetes.
+    #
+    enabled: true
+
+  # --------------------------------------------------------------------------
+  # Metrics
+  # --------------------------------------------------------------------------
+
+  metrics:
+
+    # Prometheus monitoring is not currently
+    # used in this project.
+    #
+    enabled: false
+
+defaultBackend:
+
+  # Do not install the optional default backend.
+  #
+  enabled: false
