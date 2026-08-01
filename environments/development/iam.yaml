@@ -24,7 +24,6 @@ service:
 
 database:
   scheme: postgresql
-  host: iam-postgres
   port: 5432
   name: iam
   username: postgres

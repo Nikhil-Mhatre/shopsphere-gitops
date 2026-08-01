@@ -44,8 +44,6 @@ application:
 
 database:
 
-  host: iam-postgres
-
   name: iam
 
   username: postgres
