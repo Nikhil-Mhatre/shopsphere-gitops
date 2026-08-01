@@ -81,6 +81,9 @@ spec:
 
         - ../../environments/development/postgres.yaml
 
+      # Release Name
+      releaseName: postgres
+
   # --------------------------------------------------------------------------
   # Destination Cluster
   # --------------------------------------------------------------------------
