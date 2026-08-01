@@ -73,6 +73,10 @@ spec:
     #
     path: apps/development
 
+    # Check recursively into folders
+    directory:
+      recursive: true
+
   # --------------------------------------------------------------------------
   # Destination Cluster
   # --------------------------------------------------------------------------
