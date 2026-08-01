@@ -1,32 +1,38 @@
 # ------------------------------------------------------------------------------
-# Argo CD Application
+# Argo CD Root Application
 # ------------------------------------------------------------------------------
 #
-# This Application deploys the IAM Helm chart into the
-# development environment.
+# This is the root (App of Apps) application for the Development
+# environment.
 #
-# Argo CD continuously monitors the GitOps repository.
+# Purpose
+# -------
 #
-# Whenever this file, the Helm chart, or the development values file
-# changes, Argo CD synchronizes the Kubernetes cluster so that it
-# matches the desired state stored in Git.
+# This application does NOT deploy any Kubernetes workloads directly.
 #
-# ------------------------------------------------------------------------------
+# Instead, it deploys and manages the child Argo CD Applications found
+# under:
 #
-# Repository
-#   ShopSphere-GitOps
+#   applications/development/
 #
-# Helm Chart
-#   charts/iam
+# Those child Applications are responsible for deploying individual
+# microservices and infrastructure components.
 #
-# Environment
-#   Development
+# Development Environment
 #
-# Namespace
-#   iam
+# ├── postgres-dev
+# ├── iam-dev
+# ├── catalog-dev      (future)
+# ├── order-dev        (future)
+# └── ...
 #
-# Values File
-#   dev/iam/values.yaml
+# Benefits
+# --------
+#
+# • Bootstrap the entire development environment with a single command.
+# • Automatically discover newly added applications.
+# • Keep Argo CD configuration separate from Helm charts.
+# • Maintain a simple GitOps workflow.
 #
 # ------------------------------------------------------------------------------
 
@@ -34,13 +40,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 
 metadata:
-  # Name displayed inside the Argo CD UI.
+
+  # Name displayed in the Argo CD UI.
   #
-  # Example:
-  #
-  # iam-dev
-  #
-  name: iam-dev
+  name: dev
 
   # Namespace where Argo CD is installed.
   #
@@ -48,7 +51,7 @@ metadata:
 
 spec:
 
-  # Argo CD Project.
+  # Argo CD project.
   #
   project: default
 
@@ -58,7 +61,7 @@ spec:
 
   source:
 
-    # Git repository containing the Helm chart.
+    # GitOps repository.
     #
     repoURL: https://github.com/Nikhil-Mhatre/shopsphere-gitops.git
 
@@ -66,17 +69,9 @@ spec:
     #
     targetRevision: main
 
-    # Path to the Helm chart.
+    # Directory containing all Development Applications.
     #
-    path: helm/iam
-
-    helm:
-
-      # Environment-specific values file.
-      #
-      valueFiles:
-
-        - ../../environments/dev/iam/values.yaml
+    path: applications/development
 
   # --------------------------------------------------------------------------
   # Destination Cluster
@@ -84,13 +79,14 @@ spec:
 
   destination:
 
-    # Deploy to the in-cluster Kubernetes API.
+    # In-cluster Kubernetes API.
     #
     server: https://kubernetes.default.svc
 
-    # Kubernetes namespace.
+    # Namespace where the child Applications
+    # are created.
     #
-    namespace: iam
+    namespace: argocd
 
   # --------------------------------------------------------------------------
   # Synchronization Policy
@@ -100,19 +96,11 @@ spec:
 
     automated:
 
-      # Remove Kubernetes resources that
-      # no longer exist in Git.
+      # Remove child Applications that no longer
+      # exist in Git.
       #
       prune: true
 
-      # Restore resources if they are
-      # modified manually.
+      # Restore manually modified Applications.
       #
       selfHeal: true
-
-    syncOptions:
-
-      # Automatically create the namespace
-      # if it does not exist.
-      #
-      - CreateNamespace=true

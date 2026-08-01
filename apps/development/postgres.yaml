@@ -71,7 +71,7 @@ spec:
 
     # Path to the Helm chart.
     #
-    path: helm/postgres
+    path: chart/postgres
 
     helm:
 
@@ -79,7 +79,7 @@ spec:
       #
       valueFiles:
 
-        - ../../environments/dev/postgres/values.yaml
+        - ../../environments/development/postgres.yaml
 
   # --------------------------------------------------------------------------
   # Destination Cluster
