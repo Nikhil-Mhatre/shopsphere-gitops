@@ -24,11 +24,11 @@ Instead, they should always connect through the Kubernetes Service.
 
 Example:
 
-postgres://username:password@user-postgres:5432/user
+postgres://usersname:password@users-postgres:5432/users
 
 Kubernetes automatically resolves:
 
-user-postgres
+users-postgres
 
 to the correct PostgreSQL Pod.
 
@@ -43,7 +43,7 @@ metadata:
   #
   # Example:
   #
-  # user-postgres
+  # users-postgres
   #
   name: {{ include "postgres.fullname" . }}
 

@@ -19,7 +19,7 @@ Benefits:
 Example:
 
 Pod Name:
-user-postgres-0
+users-postgres-0
 
 Even if the Pod is recreated, Kubernetes keeps the same Pod name
 and reattaches the same Persistent Volume.
@@ -35,7 +35,7 @@ metadata:
   #
   # Example:
   #
-  # user-postgres
+  # users-postgres
   #
   name: {{ include "postgres.fullname" . }}
 
@@ -94,11 +94,11 @@ spec:
                   name: {{ include "postgres.fullname" . }}
                   key: POSTGRES_DB
 
-            - name: POSTGRES_USER
+            - name: POSTGRES_users
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgres.fullname" . }}
-                  key: POSTGRES_USER
+                  key: POSTGRES_users
 
             - name: POSTGRES_PASSWORD
               valueFrom:
@@ -130,7 +130,7 @@ spec:
 
                 - "-U"
 
-                - "$(POSTGRES_USER)"
+                - "$(POSTGRES_users)"
 
             failureThreshold: {{ .Values.probes.startup.failureThreshold }}
 
@@ -150,7 +150,7 @@ spec:
 
                 - "-U"
 
-                - "$(POSTGRES_USER)"
+                - "$(POSTGRES_users)"
 
             initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
 
@@ -169,7 +169,7 @@ spec:
 
                 - "-U"
 
-                - "$(POSTGRES_USER)"
+                - "$(POSTGRES_users)"
 
             initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
 

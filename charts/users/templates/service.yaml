@@ -1,9 +1,9 @@
 {{- /*
 ------------------------------------------------------------------------------
-user Service
+users Service
 ------------------------------------------------------------------------------
 
-This template creates a Kubernetes Service for the user application.
+This template creates a Kubernetes Service for the users application.
 
 Why do we need a Service?
 
@@ -24,12 +24,12 @@ Instead, they should always communicate through a Kubernetes Service.
 
 Example:
 
-User Service
+users Service
       │
       ▼
-http://user:3000
+http://users:3000
 
-Kubernetes automatically routes the request to a healthy user Pod.
+Kubernetes automatically routes the request to a healthy users Pod.
 
 ------------------------------------------------------------------------------
 */ -}}
@@ -42,12 +42,12 @@ metadata:
   #
   # Example:
   #
-  # user
+  # users
   #
-  name: {{ include "user.fullname" . }}
+  name: {{ include "users.fullname" . }}
 
   labels:
-    {{- include "user.labels" . | nindent 4 }}
+    {{- include "users.labels" . | nindent 4 }}
 
 spec:
 
@@ -81,10 +81,10 @@ spec:
 
       protocol: TCP
 
-  # Select the user Pods.
+  # Select the users Pods.
   #
   # The selector labels must exactly match
   # the labels defined on the Deployment.
   #
   selector:
-    {{- include "user.selectorLabels" . | nindent 4 }}
+    {{- include "users.selectorLabels" . | nindent 4 }}

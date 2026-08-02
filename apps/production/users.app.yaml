@@ -2,7 +2,7 @@
 # Argo CD Application
 # ------------------------------------------------------------------------------
 #
-# Deploys the user Helm chart to the Production environment.
+# Deploys the users Helm chart to the Production environment.
 #
 # ------------------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ metadata:
 
   # Application name displayed in the Argo CD UI.
   #
-  name: user-production
+  name: users-production
 
   namespace: argocd
 
@@ -31,18 +31,18 @@ spec:
 
     targetRevision: main
 
-    path: charts/user
+    path: charts/users
 
     helm:
 
       # Stable Helm release name.
       #
-      releaseName: user
+      releaseName: users
 
       # Production configuration.
       #
       valueFiles:
-        - ../../environments/production/user.values.yaml
+        - ../../environments/production/users.values.yaml
 
   # --------------------------------------------------------------------------
   # Destination Cluster

@@ -27,11 +27,11 @@ database:
 
   # Production database.
   #
-  name: user
+  name: users
 
-  # Application database user.
+  # Application database users.
   #
-  username: postgres
+  usersname: postgres
 
   # Production password.
   #

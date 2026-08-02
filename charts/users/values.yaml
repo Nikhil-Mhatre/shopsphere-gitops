@@ -1,16 +1,16 @@
 # ------------------------------------------------------------------------------
-# user Helm Chart Configuration
+# users Helm Chart Configuration
 # ------------------------------------------------------------------------------
 #
-# This file contains all configurable values for the user microservice.
+# This file contains all configurable values for the users microservice.
 #
 # Helm combines these values with the templates inside the templates/
 # directory to generate Kubernetes manifests.
 #
 # Environment-specific values should be overridden from:
 #
-#   dev/user/values.yaml
-#   prod/user/values.yaml
+#   dev/users/values.yaml
+#   prod/users/values.yaml
 #
 # ------------------------------------------------------------------------------
 
@@ -34,9 +34,9 @@ image:
   #
   # Example:
   #
-  # docker.io/your-org/user
+  # docker.io/your-org/users
   #
-  repository: nikhilmhatre0317/shopsphere-user-service
+  repository: nikhilmhatre0317/shopsphere-users-service
 
   # Docker image tag.
   #
@@ -71,7 +71,7 @@ application:
   # Used by the application for logging,
   # metrics and observability.
   #
-  name: user
+  name: users
 
   # Application version.
   #
@@ -141,18 +141,18 @@ database:
 
   # Database name.
   #
-  name: user
+  name: users
 
-  # Database username.
+  # Database usersname.
   #
-  username: postgres
+  usersname: postgres
 
   # Database password.
   #
   # Never commit production credentials.
   # Override this value inside:
   #
-  # prod/user/values.yaml
+  # prod/users/values.yaml
   #
   password: change-me
 
@@ -246,10 +246,10 @@ ingress:
   #
   host: api.shopsphere.local
 
-  # URL path handled by the user Service.
+  # URL path handled by the users Service.
   path:
     prefix: /api/v1
-    service: user
+    service: users
 
 # ------------------------------------------------------------------------------
 # Pod Scheduling

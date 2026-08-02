@@ -1,9 +1,9 @@
 {{- /*
 ------------------------------------------------------------------------------
-user ConfigMap
+users ConfigMap
 ------------------------------------------------------------------------------
 
-This template creates a Kubernetes ConfigMap that stores the user
+This template creates a Kubernetes ConfigMap that stores the users
 application's non-sensitive configuration.
 
 Why use a ConfigMap?
@@ -34,12 +34,12 @@ metadata:
   #
   # Example:
   #
-  # user
+  # users
   #
-  name: {{ include "user.fullname" . }}
+  name: {{ include "users.fullname" . }}
 
   labels:
-    {{- include "user.labels" . | nindent 4 }}
+    {{- include "users.labels" . | nindent 4 }}
 
 data:
 

@@ -1,9 +1,9 @@
 {{/*
 ------------------------------------------------------------------------------
-user Helm Chart Helper Templates
+users Helm Chart Helper Templates
 ------------------------------------------------------------------------------
 
-This file contains reusable helper templates used throughout the user Helm
+This file contains reusable helper templates used throughout the users Helm
 chart.
 
 Why use helper templates?
@@ -28,7 +28,7 @@ metadata:
 inside every template, we simply write:
 
 metadata:
-  name: {{ include "user.fullname" . }}
+  name: {{ include "users.fullname" . }}
 
 Official Documentation:
 https://helm.sh/docs/chart_template_guide/named_templates/
@@ -41,11 +41,11 @@ Generate the Helm chart name.
 
 Example:
 
-user
+users
 
 This value comes from Chart.yaml.
 */}}
-{{- define "user.name" -}}
+{{- define "users.name" -}}
 {{- .Chart.Name -}}
 {{- end -}}
 
@@ -54,15 +54,15 @@ Generate the fully qualified resource name.
 
 Helm Release Example:
 
-helm install user ./charts/user
+helm install users ./charts/users
 
 Result:
 
-user
+users
 
 If installed as:
 
-helm install identity-service ./charts/user
+helm install identity-service ./charts/users
 
 Result:
 
@@ -80,7 +80,7 @@ Secret
 ServiceAccount
 
 */}}
-{{- define "user.fullname" -}}
+{{- define "users.fullname" -}}
 {{- .Release.Name -}}
 {{- end -}}
 
@@ -94,11 +94,11 @@ They help Kubernetes, Helm and developers identify resources.
 Example:
 
 kubectl get all \
--l app.kubernetes.io/name=user
+-l app.kubernetes.io/name=users
 
 */}}
-{{- define "user.labels" -}}
-app.kubernetes.io/name: {{ include "user.name" . }}
+{{- define "users.labels" -}}
+app.kubernetes.io/name: {{ include "users.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
@@ -118,8 +118,8 @@ can break communication between Services
 and Pods.
 
 */}}
-{{- define "user.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "user.name" . }}
+{{- define "users.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "users.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
@@ -133,9 +133,9 @@ Otherwise, Kubernetes will use the namespace's
 default ServiceAccount.
 
 */}}
-{{- define "user.serviceAccountName" -}}
+{{- define "users.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-{{ include "user.fullname" . }}
+{{ include "users.fullname" . }}
 {{- else -}}
 default
 {{- end -}}

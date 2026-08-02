@@ -1,14 +1,14 @@
 {{- /*
 ------------------------------------------------------------------------------
-user Ingress
+users Ingress
 ------------------------------------------------------------------------------
 
 This template creates a Kubernetes Ingress resource.
 
-An Ingress exposes the user Service outside the Kubernetes cluster.
+An Ingress exposes the users Service outside the Kubernetes cluster.
 
 Incoming requests are received by the NGINX Ingress Controller and
-forwarded to the user Service.
+forwarded to the users Service.
 
 Example
 
@@ -18,10 +18,10 @@ Example
                  NGINX Ingress Controller
                            │
                            ▼
-                    user Kubernetes Service
+                    users Kubernetes Service
                            │
                            ▼
-                        user Pod
+                        users Pod
 
 This template is created only when Ingress is enabled.
 
@@ -37,10 +37,10 @@ metadata:
 
   # Name of the Ingress resource.
   #
-  name: {{ include "user.fullname" . }}
+  name: {{ include "users.fullname" . }}
 
   labels:
-    {{- include "user.labels" . | nindent 4 }}
+    {{- include "users.labels" . | nindent 4 }}
 
 spec:
 
@@ -65,7 +65,7 @@ spec:
 
               service:
 
-                name: {{ include "user.fullname" . }}
+                name: {{ include "users.fullname" . }}
 
                 port:
 

@@ -1,9 +1,9 @@
 {{- /*
 ------------------------------------------------------------------------------
-user Deployment
+users Deployment
 ------------------------------------------------------------------------------
 
-This template deploys the user application as a Kubernetes Deployment.
+This template deploys the users application as a Kubernetes Deployment.
 
 Why use a Deployment?
 
@@ -16,7 +16,7 @@ It provides:
 - Horizontal scaling
 - Self-healing
 
-Unlike PostgreSQL, the user application does not maintain persistent
+Unlike PostgreSQL, the users application does not maintain persistent
 application state. Therefore a Deployment is the appropriate workload.
 
 ------------------------------------------------------------------------------
@@ -30,12 +30,12 @@ metadata:
   #
   # Example:
   #
-  # user
+  # users
   #
-  name: {{ include "user.fullname" . }}
+  name: {{ include "users.fullname" . }}
 
   labels:
-    {{- include "user.labels" . | nindent 4 }}
+    {{- include "users.labels" . | nindent 4 }}
 
 spec:
 
@@ -46,24 +46,24 @@ spec:
   selector:
 
     matchLabels:
-      {{- include "user.selectorLabels" . | nindent 6 }}
+      {{- include "users.selectorLabels" . | nindent 6 }}
 
   template:
 
     metadata:
 
       labels:
-        {{- include "user.selectorLabels" . | nindent 8 }}
+        {{- include "users.selectorLabels" . | nindent 8 }}
 
     spec:
 
       # ServiceAccount used by the application.
       #
-      serviceAccountName: {{ include "user.serviceAccountName" . }}
+      serviceAccountName: {{ include "users.serviceAccountName" . }}
 
       containers:
 
-        - name: {{ include "user.name" . }}
+        - name: {{ include "users.name" . }}
 
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
 
@@ -88,7 +88,7 @@ spec:
 
             - configMapRef:
 
-                name: {{ include "user.fullname" . }}
+                name: {{ include "users.fullname" . }}
 
           # Load sensitive configuration
           # from the Kubernetes Secret.
@@ -101,7 +101,7 @@ spec:
 
                 secretKeyRef:
 
-                  name: {{ include "user.fullname" . }}
+                  name: {{ include "users.fullname" . }}
 
                   key: DATABASE_URL
 

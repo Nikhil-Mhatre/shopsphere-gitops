@@ -1,8 +1,8 @@
 # ------------------------------------------------------------------------------
-# user Production Environment
+# users Production Environment
 # ------------------------------------------------------------------------------
 #
-# This file overrides the default user Helm chart values for the
+# This file overrides the default users Helm chart values for the
 # production environment.
 #
 # Only values that differ from the chart defaults should be defined here.
@@ -44,9 +44,9 @@ application:
 
 database:
 
-  name: user
+  name: users
 
-  username: postgres
+  usersname: postgres
 
   password: replace-with-secure-password
 

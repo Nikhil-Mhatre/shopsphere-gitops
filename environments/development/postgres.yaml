@@ -10,8 +10,8 @@ image:
   pullPolicy: IfNotPresent
 
 database:
-  name: user
-  username: postgres
+  name: users
+  usersname: postgres
   password: change-me
 
 service:

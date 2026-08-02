@@ -72,15 +72,15 @@ database:
   #
   # Example:
   #
-  # user
+  # users
   # catalog
   # order
   #
   name: app
 
-  # Application database user.
+  # Application database users.
   #
-  username: postgres
+  usersname: postgres
 
   # Application database password.
   #

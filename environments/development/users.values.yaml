@@ -1,17 +1,17 @@
 # ------------------------------------------------------------------------------
-# user Development Environment
+# users Development Environment
 # ------------------------------------------------------------------------------
 
 replicaCount: 1
 
 image:
-  repository: nikhilmhatre0317/shopsphere-user-service
+  repository: nikhilmhatre0317/shopsphere-users-service
   tag: dev
   pullPolicy: IfNotPresent
 
 application:
   environment: development
-  name: user
+  name: users
   version: "1.0.0"
   host: 0.0.0.0
   port: 3000
@@ -25,8 +25,8 @@ service:
 database:
   scheme: postgresql
   port: 5432
-  name: user
-  username: postgres
+  name: users
+  usersname: postgres
   password: change-me
   connectTimeoutMs: 10000
   logQueries: true
