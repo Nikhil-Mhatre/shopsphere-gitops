@@ -2,32 +2,33 @@
 # Argo CD Application
 # ------------------------------------------------------------------------------
 #
-# Deploys the NGINX Ingress Controller into the Development environment.
+# Purpose
+# -------
 #
-# The NGINX Ingress Controller acts as the entry point for all incoming
-# HTTP/HTTPS traffic into the Kubernetes cluster.
+# Deploy the NGINX Ingress Controller into the Development environment.
 #
-# Example
+# Unlike ShopSphere services, the NGINX Ingress Controller is deployed
+# directly from the official Helm chart maintained by the Kubernetes
+# Ingress-NGINX project.
 #
-#                 http://api.shopsphere.local
-#                            │
-#                            ▼
-#                 NGINX Ingress Controller
-#                            │
-#        ┌───────────────────┼───────────────────┐
-#        ▼                   ▼                   ▼
-#   /api/v1/auth      /api/v1/catalog     /api/v1/orders
-#        │                   │                   │
-#        ▼                   ▼                   ▼
-#       users               Catalog             Orders
+# Environment-specific configuration is stored inside this GitOps repository.
 #
-# This Application deploys the local wrapper Helm chart located in:
+# Architecture
+# ------------
 #
-#   charts/ingress-nginx
-#
-# Environment-specific configuration is loaded from:
-#
-#   environments/development/ingress-nginx.values.yaml
+#          Official Helm Repository
+#                     │
+#                     ▼
+#             ingress-nginx Chart
+#                     │
+#                     ▼
+#                 Argo CD
+#                     ▲
+#                     │
+#         ShopSphere GitOps Repository
+#                     │
+#                     ▼
+#     environments/development/ingress-nginx.values.yaml
 #
 # ------------------------------------------------------------------------------
 
@@ -36,9 +37,9 @@ kind: Application
 
 metadata:
 
-  # Name displayed in the Argo CD UI.
+  # Application name displayed in the Argo CD UI.
   #
-  name: ingress-nginx-development
+  name: development-ingress-nginx
 
   # Namespace where Argo CD is installed.
   #
@@ -51,47 +52,60 @@ spec:
   project: default
 
   # --------------------------------------------------------------------------
-  # Source Repository
+  # Sources
   # --------------------------------------------------------------------------
+  #
+  # Source 1
+  # --------
+  #
+  # Official Helm chart.
+  #
+  # Source 2
+  # --------
+  #
+  # GitOps repository containing the environment values.
+  #
+  sources:
 
-  source:
+    # ------------------------------------------------------------------------
+    # Official Helm Chart
+    # ------------------------------------------------------------------------
 
-    # GitOps repository.
-    #
-    repoURL: https://github.com/Nikhil-Mhatre/shopsphere-gitops.git
+    - repoURL: https://kubernetes.github.io/ingress-nginx
 
-    # Git branch to monitor.
-    #
-    targetRevision: main
+      chart: ingress-nginx
 
-    # Path to the wrapper Helm chart.
-    #
-    path: charts/ingress-nginx
+      targetRevision: 4.13.2
 
-    helm:
+      helm:
 
-      # Stable Helm release name.
-      #
-      releaseName: ingress-nginx
+        releaseName: ingress-nginx
 
-      # Development environment values.
-      #
-      valueFiles:
+        valueFiles:
 
-        - ../../environments/development/ingress-nginx.values.yaml
+          - $values/environments/development/ingress-nginx.values.yaml
+
+    # ------------------------------------------------------------------------
+    # GitOps Repository
+    # ------------------------------------------------------------------------
+
+    - repoURL: https://github.com/Nikhil-Mhatre/shopsphere-gitops.git
+
+      targetRevision: main
+
+      ref: values
 
   # --------------------------------------------------------------------------
-  # Destination Cluster
+  # Destination
   # --------------------------------------------------------------------------
 
   destination:
 
-    # Kubernetes API server.
+    # Deploy into the Kubernetes cluster managed by Argo CD.
     #
     server: https://kubernetes.default.svc
 
-    # Namespace where the Ingress Controller
-    # will be installed.
+    # Namespace where the controller will run.
     #
     namespace: ingress-nginx
 
