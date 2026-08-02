@@ -40,7 +40,7 @@ metadata:
   #
   # users-dev
   #
-  name: users-dev
+  name: development-users
 
   # Namespace where Argo CD is installed.
   #

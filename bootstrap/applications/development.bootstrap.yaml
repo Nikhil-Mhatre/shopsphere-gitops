@@ -43,7 +43,7 @@ metadata:
 
   # Name displayed in the Argo CD UI.
   #
-  name: dev
+  name: development-root
 
   # Namespace where Argo CD is installed.
   #

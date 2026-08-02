@@ -40,7 +40,7 @@ metadata:
   #
   # postgres-dev
   #
-  name: postgres-dev
+  name: development-postgres
 
   # Namespace where Argo CD is installed.
   #
