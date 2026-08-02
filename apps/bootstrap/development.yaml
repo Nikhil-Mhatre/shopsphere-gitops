@@ -21,7 +21,7 @@
 # Development Environment
 #
 # ├── postgres-dev
-# ├── iam-dev
+# ├── user-dev
 # ├── catalog-dev      (future)
 # ├── order-dev        (future)
 # └── ...

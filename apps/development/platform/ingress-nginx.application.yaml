@@ -19,7 +19,7 @@
 #   /api/v1/auth      /api/v1/catalog     /api/v1/orders
 #        │                   │                   │
 #        ▼                   ▼                   ▼
-#       IAM               Catalog             Orders
+#       user               Catalog             Orders
 #
 # This Application deploys the local wrapper Helm chart located in:
 #

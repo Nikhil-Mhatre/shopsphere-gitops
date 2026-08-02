@@ -72,7 +72,7 @@ database:
   #
   # Example:
   #
-  # iam
+  # user
   # catalog
   # order
   #

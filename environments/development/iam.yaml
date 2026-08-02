@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# IAM Development Environment
+# user Development Environment
 # ------------------------------------------------------------------------------
 
 replicaCount: 1
@@ -11,7 +11,7 @@ image:
 
 application:
   environment: development
-  name: iam
+  name: user
   version: "1.0.0"
   host: 0.0.0.0
   port: 3000
@@ -25,7 +25,7 @@ service:
 database:
   scheme: postgresql
   port: 5432
-  name: iam
+  name: user
   username: postgres
   password: change-me
   connectTimeoutMs: 10000

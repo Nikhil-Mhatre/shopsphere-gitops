@@ -23,7 +23,7 @@
 #   Development
 #
 # Namespace
-#   iam
+#   user
 #
 # Values File
 #   dev/postgres/values.yaml
@@ -96,7 +96,7 @@ spec:
 
     # Kubernetes namespace.
     #
-    namespace: iam
+    namespace: user
 
   # --------------------------------------------------------------------------
   # Synchronization Policy

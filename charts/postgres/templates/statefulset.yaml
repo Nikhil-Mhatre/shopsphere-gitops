@@ -19,7 +19,7 @@ Benefits:
 Example:
 
 Pod Name:
-iam-postgres-0
+user-postgres-0
 
 Even if the Pod is recreated, Kubernetes keeps the same Pod name
 and reattaches the same Persistent Volume.
@@ -35,7 +35,7 @@ metadata:
   #
   # Example:
   #
-  # iam-postgres
+  # user-postgres
   #
   name: {{ include "postgres.fullname" . }}
 

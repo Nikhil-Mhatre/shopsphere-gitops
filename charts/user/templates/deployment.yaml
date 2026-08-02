@@ -1,9 +1,9 @@
 {{- /*
 ------------------------------------------------------------------------------
-IAM Deployment
+user Deployment
 ------------------------------------------------------------------------------
 
-This template deploys the IAM application as a Kubernetes Deployment.
+This template deploys the user application as a Kubernetes Deployment.
 
 Why use a Deployment?
 
@@ -16,7 +16,7 @@ It provides:
 - Horizontal scaling
 - Self-healing
 
-Unlike PostgreSQL, the IAM application does not maintain persistent
+Unlike PostgreSQL, the user application does not maintain persistent
 application state. Therefore a Deployment is the appropriate workload.
 
 ------------------------------------------------------------------------------
@@ -30,12 +30,12 @@ metadata:
   #
   # Example:
   #
-  # iam
+  # user
   #
-  name: {{ include "iam.fullname" . }}
+  name: {{ include "user.fullname" . }}
 
   labels:
-    {{- include "iam.labels" . | nindent 4 }}
+    {{- include "user.labels" . | nindent 4 }}
 
 spec:
 
@@ -46,24 +46,24 @@ spec:
   selector:
 
     matchLabels:
-      {{- include "iam.selectorLabels" . | nindent 6 }}
+      {{- include "user.selectorLabels" . | nindent 6 }}
 
   template:
 
     metadata:
 
       labels:
-        {{- include "iam.selectorLabels" . | nindent 8 }}
+        {{- include "user.selectorLabels" . | nindent 8 }}
 
     spec:
 
       # ServiceAccount used by the application.
       #
-      serviceAccountName: {{ include "iam.serviceAccountName" . }}
+      serviceAccountName: {{ include "user.serviceAccountName" . }}
 
       containers:
 
-        - name: {{ include "iam.name" . }}
+        - name: {{ include "user.name" . }}
 
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
 
@@ -88,7 +88,7 @@ spec:
 
             - configMapRef:
 
-                name: {{ include "iam.fullname" . }}
+                name: {{ include "user.fullname" . }}
 
           # Load sensitive configuration
           # from the Kubernetes Secret.
@@ -101,7 +101,7 @@ spec:
 
                 secretKeyRef:
 
-                  name: {{ include "iam.fullname" . }}
+                  name: {{ include "user.fullname" . }}
 
                   key: DATABASE_URL
 

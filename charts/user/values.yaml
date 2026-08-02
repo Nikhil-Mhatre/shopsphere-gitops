@@ -1,16 +1,16 @@
 # ------------------------------------------------------------------------------
-# IAM Helm Chart Configuration
+# user Helm Chart Configuration
 # ------------------------------------------------------------------------------
 #
-# This file contains all configurable values for the IAM microservice.
+# This file contains all configurable values for the user microservice.
 #
 # Helm combines these values with the templates inside the templates/
 # directory to generate Kubernetes manifests.
 #
 # Environment-specific values should be overridden from:
 #
-#   dev/iam/values.yaml
-#   prod/iam/values.yaml
+#   dev/user/values.yaml
+#   prod/user/values.yaml
 #
 # ------------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ image:
   #
   # Example:
   #
-  # docker.io/your-org/iam
+  # docker.io/your-org/user
   #
   repository: nikhilmhatre0317/shopsphere-user-service
 
@@ -71,7 +71,7 @@ application:
   # Used by the application for logging,
   # metrics and observability.
   #
-  name: iam
+  name: user
 
   # Application version.
   #
@@ -141,7 +141,7 @@ database:
 
   # Database name.
   #
-  name: iam
+  name: user
 
   # Database username.
   #
@@ -152,7 +152,7 @@ database:
   # Never commit production credentials.
   # Override this value inside:
   #
-  # prod/iam/values.yaml
+  # prod/user/values.yaml
   #
   password: change-me
 
@@ -246,7 +246,7 @@ ingress:
   #
   host: api.shopsphere.local
 
-  # URL path handled by the IAM Service.
+  # URL path handled by the user Service.
   path:
     prefix: /api/v1
     service: auth

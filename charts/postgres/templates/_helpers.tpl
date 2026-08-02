@@ -56,11 +56,11 @@ Helm Release Name:
 
 If the release name is:
 
-iam-postgres
+user-postgres
 
 The generated resource name becomes:
 
-iam-postgres
+user-postgres
 
 This ensures every Kubernetes resource created by this chart
 shares the same predictable name.
@@ -74,7 +74,7 @@ Secret
 
 will all be named:
 
-iam-postgres
+user-postgres
 
 */}}
 {{- define "postgres.fullname" -}}

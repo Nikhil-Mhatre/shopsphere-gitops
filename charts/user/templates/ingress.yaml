@@ -1,14 +1,14 @@
 {{- /*
 ------------------------------------------------------------------------------
-IAM Ingress
+user Ingress
 ------------------------------------------------------------------------------
 
 This template creates a Kubernetes Ingress resource.
 
-An Ingress exposes the IAM Service outside the Kubernetes cluster.
+An Ingress exposes the user Service outside the Kubernetes cluster.
 
 Incoming requests are received by the NGINX Ingress Controller and
-forwarded to the IAM Service.
+forwarded to the user Service.
 
 Example
 
@@ -18,10 +18,10 @@ Example
                  NGINX Ingress Controller
                            │
                            ▼
-                    IAM Kubernetes Service
+                    user Kubernetes Service
                            │
                            ▼
-                        IAM Pod
+                        user Pod
 
 This template is created only when Ingress is enabled.
 
@@ -37,10 +37,10 @@ metadata:
 
   # Name of the Ingress resource.
   #
-  name: {{ include "iam.fullname" . }}
+  name: {{ include "user.fullname" . }}
 
   labels:
-    {{- include "iam.labels" . | nindent 4 }}
+    {{- include "user.labels" . | nindent 4 }}
 
 spec:
 
@@ -65,7 +65,7 @@ spec:
 
               service:
 
-                name: {{ include "iam.fullname" . }}
+                name: {{ include "user.fullname" . }}
 
                 port:
 

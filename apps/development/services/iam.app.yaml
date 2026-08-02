@@ -2,7 +2,7 @@
 # Argo CD Application
 # ------------------------------------------------------------------------------
 #
-# This Application deploys the IAM Helm chart into the
+# This Application deploys the user Helm chart into the
 # development environment.
 #
 # Argo CD continuously monitors the GitOps repository.
@@ -17,16 +17,16 @@
 #   ShopSphere-GitOps
 #
 # Helm Chart
-#   charts/iam
+#   charts/user
 #
 # Environment
 #   Development
 #
 # Namespace
-#   iam
+#   user
 #
 # Values File
-#   dev/iam/values.yaml
+#   dev/user/values.yaml
 #
 # ------------------------------------------------------------------------------
 
@@ -38,9 +38,9 @@ metadata:
   #
   # Example:
   #
-  # iam-dev
+  # user-dev
   #
-  name: iam-dev
+  name: user-dev
 
   # Namespace where Argo CD is installed.
   #
@@ -68,7 +68,7 @@ spec:
 
     # Path to the Helm chart.
     #
-    path: charts/iam
+    path: charts/user
 
     helm:
 
@@ -76,10 +76,10 @@ spec:
       #
       valueFiles:
 
-        - ../../environments/development/iam.yaml
+        - ../../environments/development/user.yaml
 
       # Release Name
-      releaseName: iam
+      releaseName: user
 
   # --------------------------------------------------------------------------
   # Destination Cluster
@@ -93,7 +93,7 @@ spec:
 
     # Kubernetes namespace.
     #
-    namespace: iam
+    namespace: user
 
   # --------------------------------------------------------------------------
   # Synchronization Policy

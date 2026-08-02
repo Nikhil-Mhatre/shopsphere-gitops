@@ -20,7 +20,7 @@
 # Production Environment
 #
 # ├── postgres-production
-# ├── iam-production
+# ├── user-production
 # ├── catalog-production      (future)
 # ├── order-production        (future)
 # └── ...

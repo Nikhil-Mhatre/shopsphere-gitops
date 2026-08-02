@@ -27,7 +27,7 @@ database:
 
   # Production database.
   #
-  name: iam
+  name: user
 
   # Application database user.
   #

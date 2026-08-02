@@ -1,9 +1,9 @@
 {{- /*
 ------------------------------------------------------------------------------
-IAM ConfigMap
+user ConfigMap
 ------------------------------------------------------------------------------
 
-This template creates a Kubernetes ConfigMap that stores the IAM
+This template creates a Kubernetes ConfigMap that stores the user
 application's non-sensitive configuration.
 
 Why use a ConfigMap?
@@ -34,12 +34,12 @@ metadata:
   #
   # Example:
   #
-  # iam
+  # user
   #
-  name: {{ include "iam.fullname" . }}
+  name: {{ include "user.fullname" . }}
 
   labels:
-    {{- include "iam.labels" . | nindent 4 }}
+    {{- include "user.labels" . | nindent 4 }}
 
 data:
 

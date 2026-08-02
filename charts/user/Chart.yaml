@@ -2,7 +2,7 @@
 # Helm Chart Metadata
 # ------------------------------------------------------------------------------
 #
-# This file contains metadata about the IAM Helm chart.
+# This file contains metadata about the user Helm chart.
 #
 # Helm reads this file before rendering any Kubernetes manifests.
 #
@@ -28,16 +28,16 @@ apiVersion: v2
 #
 # Example:
 #
-# charts/iam
+# charts/user
 #
-name: iam
+name: user
 
 # Short description displayed by Helm commands such as:
 #
 #   helm search
 #   helm show chart
 #
-description: A reusable Helm chart for deploying the IAM microservice on Kubernetes.
+description: A reusable Helm chart for deploying the user microservice on Kubernetes.
 
 # Helm chart type.
 #
@@ -68,7 +68,7 @@ version: 0.1.0
 
 # Application version.
 #
-# Represents the version of the IAM application
+# Represents the version of the user application
 # that this chart is intended to deploy.
 #
 # This value is informational only.
