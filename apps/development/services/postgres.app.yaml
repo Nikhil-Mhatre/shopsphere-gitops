@@ -79,7 +79,7 @@ spec:
       #
       valueFiles:
 
-        - ../../environments/development/postgres.yaml
+        - ../../environments/development/postgres.values.yaml
 
       # Release Name
       releaseName: postgres

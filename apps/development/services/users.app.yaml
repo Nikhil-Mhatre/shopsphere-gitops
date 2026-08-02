@@ -76,7 +76,7 @@ spec:
       #
       valueFiles:
 
-        - ../../environments/development/users.yaml
+        - ../../environments/development/users.values.yaml
 
       # Release Name
       releaseName: users
