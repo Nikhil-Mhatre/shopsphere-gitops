@@ -249,7 +249,7 @@ ingress:
   # URL path handled by the user Service.
   path:
     prefix: /api/v1
-    service: auth
+    service: user
 
 # ------------------------------------------------------------------------------
 # Pod Scheduling
