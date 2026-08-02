@@ -190,7 +190,7 @@ probes:
 
   startup:
 
-    path: /api/v1/health
+    path: /api/v1/users/health
 
     failureThreshold: 30
 
@@ -198,7 +198,7 @@ probes:
 
   readiness:
 
-    path: /api/v1/health
+    path: /api/v1/users/health
 
     initialDelaySeconds: 10
 
@@ -206,7 +206,7 @@ probes:
 
   liveness:
 
-    path: /api/v1/health
+    path: /api/v1/users/health
 
     initialDelaySeconds: 30
 

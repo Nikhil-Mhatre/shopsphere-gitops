@@ -42,17 +42,17 @@ resources:
 
 probes:
   startup:
-    path: /api/v1/health
+    path: /api/v1/users/health
     failureThreshold: 30
     periodSeconds: 10
 
   readiness:
-    path: /api/v1/health
+    path: /api/v1/users/health
     initialDelaySeconds: 10
     periodSeconds: 10
 
   liveness:
-    path: /api/v1/health
+    path: /api/v1/users/health
     initialDelaySeconds: 30
     periodSeconds: 20
 
