@@ -80,4 +80,4 @@ resources:
 
   - applications/development.bootstrap.yaml
 
-  - applications/production.bootstrap.yaml
+  # - applications/production.bootstrap.yaml
