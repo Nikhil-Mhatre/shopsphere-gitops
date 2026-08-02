@@ -53,7 +53,7 @@ spec:
   # The "default" project is sufficient
   # for this project.
   #
-  project: default
+  project: services
 
   # --------------------------------------------------------------------------
   # Source Repository

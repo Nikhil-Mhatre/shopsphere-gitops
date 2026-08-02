@@ -49,7 +49,7 @@ spec:
 
   # Argo CD Project.
   #
-  project: default
+  project: platform
 
   # --------------------------------------------------------------------------
   # Sources

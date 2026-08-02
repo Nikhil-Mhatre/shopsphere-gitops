@@ -50,7 +50,7 @@ spec:
 
   # Argo CD Project.
   #
-  project: default
+  project: services
 
   # --------------------------------------------------------------------------
   # Source Repository

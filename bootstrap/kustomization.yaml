@@ -1,0 +1,83 @@
+# ------------------------------------------------------------------------------
+# Kustomization
+# ------------------------------------------------------------------------------
+#
+# Purpose
+# -------
+#
+# This file bootstraps the ShopSphere GitOps platform.
+#
+# Applying this directory installs:
+#
+#   1. Argo CD Projects
+#   2. Bootstrap Applications
+#
+# After the bootstrap completes successfully, Argo CD becomes responsible
+# for deploying and managing every application defined in this repository.
+#
+# Bootstrapping Workflow
+# ----------------------
+#
+#                 kubectl apply -k bootstrap/
+#                              │
+#                              ▼
+#                  bootstrap/kustomization.yaml
+#                              │
+#              ┌───────────────┴───────────────┐
+#              ▼                               ▼
+#        App Projects               Bootstrap Applications
+#              │                               │
+#              └───────────────┬───────────────┘
+#                              ▼
+#                           Argo CD
+#                              │
+#                              ▼
+#                  Applications (App of Apps)
+#                              │
+#                              ▼
+#                       Helm Charts
+#                              │
+#                              ▼
+#                        Kubernetes
+#
+# Usage
+# -----
+#
+# Bootstrap the GitOps platform:
+#
+#   kubectl apply -k bootstrap/
+#
+# ------------------------------------------------------------------------------
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+kind: Kustomization
+
+# ------------------------------------------------------------------------------
+# Resources
+# ------------------------------------------------------------------------------
+#
+# Resources are applied in the order listed below.
+#
+# 1. Argo CD Projects
+# 2. Bootstrap Applications
+#
+# ------------------------------------------------------------------------------
+
+resources:
+
+  # --------------------------------------------------------------------------
+  # Argo CD Projects
+  # --------------------------------------------------------------------------
+
+  - projects/platform.project.yaml
+
+  - projects/services.project.yaml
+
+  # --------------------------------------------------------------------------
+  # Bootstrap Applications
+  # --------------------------------------------------------------------------
+
+  - applications/development.bootstrap.yaml
+
+  - applications/production.bootstrap.yaml
