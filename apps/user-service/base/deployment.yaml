@@ -54,6 +54,11 @@ spec:
           # Instructs Kubernetes to pull the image only if it is not already present on the local node
           imagePullPolicy: IfNotPresent
 
+          # Includes the environmental variables need to run the application
+          envFrom:
+            - configMapRef:
+                name: user-service-config
+
           # Defines the network ports exposed by the container
           ports:
             # A descriptive name for the port

@@ -1,0 +1,12 @@
+# apps/user-service/base/configmap.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service-config
+data:
+  SERVICE_NAME: "user-service"
+  SERVICE_VERSION: "1.0.0"
+  HOST: "0.0.0.0"
+  PORT: "3000"
+  LOG_LEVEL: "info"

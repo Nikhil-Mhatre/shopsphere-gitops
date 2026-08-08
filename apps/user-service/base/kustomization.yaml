@@ -14,3 +14,5 @@ resources:
 
   # Includes the service configuration file in the build
   - service.yaml
+  # Includes the environmental variables need to run the application
+  - configmap.yaml
