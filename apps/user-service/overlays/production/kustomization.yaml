@@ -20,7 +20,7 @@ images:
   # The name of the original image to match and update in the deployment
   - name: nikhilmhatre0317/shopsphere-user-service
     # The new specific tag to apply to the matched image for this production overlay
-    newTag: 84152f3
+    newTag: 1.0.0
 
 # Defines common labels to be added to all resources within this Kustomization
 labels:

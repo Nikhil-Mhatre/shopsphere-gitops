@@ -1,0 +1,44 @@
+# The file path indicating where this ArgoCD application configuration is stored
+# argocd/applications/user-service-production.yaml
+
+# Defines the specific ArgoCD API version to use for this resource
+apiVersion: argoproj.io/v1alpha1
+# Specifies that the resource being created is an ArgoCD Application, which manages deployment state
+kind: Application
+
+# Contains identifying metadata for the Application resource
+metadata:
+  # The unique name assigned to this ArgoCD application
+  name: shopsphere-user-production
+  # The namespace where this Application resource itself will reside
+  namespace: argocd
+
+# Defines the specific configuration and behavior for this ArgoCD application
+spec:
+  # Links this application to the 'shopsphere' ArgoCD AppProject for logical grouping and access control
+  project: shopsphere
+
+  # Configures the Git repository source from which ArgoCD will fetch the application manifests
+  source:
+    # A placeholder for the URL of the GitOps repository containing the configurations
+    repoURL: "https://github.com/Nikhil-Mhatre/shopsphere-gitops.git"
+    # Specifies the Git branch, tag, or commit to sync the manifests from
+    targetRevision: main
+    # The specific directory path within the Git repository where the target manifests are located
+    path: apps/user-service/overlays/production
+
+  # Defines the target cluster and namespace where the application resources will be deployed
+  destination:
+    # Specifies the local in-cluster Kubernetes API server as the deployment target
+    server: https://kubernetes.default.svc
+    # The target namespace in the destination cluster where the application resources will be created
+    namespace: shopsphere-production
+
+  # Configures how ArgoCD should apply changes from the source repository to the destination cluster
+  syncPolicy:
+    # Enables automatic synchronization of the application state with the Git repository
+    automated:
+      # Automatically deletes resources from the cluster that are no longer present in the Git repository
+      prune: true
+      # Automatically reverts any manual changes made directly to the cluster back to the state defined in Git
+      selfHeal: true
