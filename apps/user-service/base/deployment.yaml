@@ -40,9 +40,6 @@ spec:
 
     # The specification of the pod's contents and behavior
     spec:
-      # Specifies the ServiceAccount to be used by the pods for identity
-      serviceAccountName: user-service
-
       # Prevents the automatic mounting of the ServiceAccount API token into the pod for better security
       automountServiceAccountToken: false
 
@@ -111,25 +108,3 @@ spec:
             limits:
               cpu: 500m
               memory: 512Mi
-
-# Standard YAML separator used to define multiple Kubernetes resources in a single file
----
-# Specifies the core Kubernetes API version used for this resource
-apiVersion: v1
-# Defines the resource type as a ServiceAccount, providing an identity for pods
-kind: ServiceAccount
-
-# Contains identifying metadata for the ServiceAccount
-metadata:
-  # The unique name given to this ServiceAccount
-  name: user-service
-
-  # Key-value pairs used for organizing and categorizing the resource
-  labels:
-    # Identifies the specific application name
-    app.kubernetes.io/name: user-service
-    # Indicates that this ServiceAccount belongs to the overall 'shopsphere' application
-    app.kubernetes.io/part-of: shopsphere
-
-# Prevents the automatic mounting of the ServiceAccount API token globally for this account
-automountServiceAccountToken: false
