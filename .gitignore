@@ -1,0 +1,25 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Kubernetes generated/local files
+*.secret.yaml
+*.local.yaml
+
+# Terraform/local tooling state if introduced later
+.terraform/
+*.tfstate
+*.tfstate.*
