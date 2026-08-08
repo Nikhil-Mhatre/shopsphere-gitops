@@ -121,3 +121,12 @@ spec:
             limits:
               cpu: 500m
               memory: 512Mi
+
+          volumeMounts:
+          - name: aiven-ca
+            mountPath: /etc/ssl/aiven
+            readOnly: true
+      volumes:
+        - name: aiven-ca
+          secret:
+            secretName: user-service-database-ca
