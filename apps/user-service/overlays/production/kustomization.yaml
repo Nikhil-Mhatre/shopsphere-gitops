@@ -1,0 +1,32 @@
+# The file path indicating where this production overlay configuration is stored
+# apps/user-service/overlays/production/kustomization.yaml:
+
+# Specifies the Kustomize API version used for this configuration
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+# Defines the resource type as a Kustomization file, which manages and modifies Kubernetes configurations
+kind: Kustomization
+
+# Sets the target namespace for all resources managed by this Kustomization to 'shopsphere-production'
+namespace: shopsphere-production
+
+# A list of paths to base resources or other kustomizations to inherit from
+resources:
+  # Includes the base configuration for the user-service located in the parent directory
+  - ../../base
+
+# A list of image modifications to override the base resource image definitions
+images:
+  # The name of the original image to match and update in the deployment
+  - name: nikhilmhatre0317/shopsphere-user-service
+    # The new specific tag to apply to the matched image for this production overlay
+    newTag: 84152f3
+
+# Defines common labels to be added to all resources within this Kustomization
+labels:
+  # Instructs Kustomize to also inject these labels into resource selectors (such as Deployment pod selectors)
+  - includeSelectors: true
+    # The actual key-value pairs of the labels to apply
+    pairs:
+      # Adds a label indicating that these resources specifically belong to the production environment
+      app.kubernetes.io/environment: production

@@ -1,0 +1,40 @@
+# The file path indicating where this configuration is stored
+# apps/user-service/base/service.yaml
+
+# Specifies the core Kubernetes API version used for this resource
+apiVersion: v1
+# Defines the resource type as a Service, which provides network access to a logical set of pods
+kind: Service
+
+# Contains identifying metadata for the Service
+metadata:
+  # The unique name given to this Service
+  name: user-service
+
+  # Key-value pairs used for organizing and categorizing the resource
+  labels:
+    # Identifies the specific application name
+    app.kubernetes.io/name: user-service
+    # Indicates that this Service belongs to the overall 'shopsphere' application
+    app.kubernetes.io/part-of: shopsphere
+
+# Defines the desired state and routing behavior of the Service
+spec:
+  # Exposes the Service on a cluster-internal IP, making it only reachable from within the cluster
+  type: ClusterIP
+
+  # Determines how the Service identifies which pods to route traffic to
+  selector:
+    # Routes traffic to pods that have this specific label
+    app.kubernetes.io/name: user-service
+
+  # A list of network ports exposed by this Service
+  ports:
+    # A descriptive name for the exposed port
+    - name: http
+      # The port number exposed by the Service internally within the cluster
+      port: 80
+      # The port name or number on the destination pods where traffic will be sent
+      targetPort: http
+      # The network protocol used for this port mapping
+      protocol: TCP

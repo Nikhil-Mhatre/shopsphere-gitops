@@ -1,0 +1,16 @@
+# The file path indicating where this configuration is stored.
+# apps/user-service/base/kustomization.yaml
+
+# Specifies the Kustomize API version used for this configuration
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+# Defines the resource type as a Kustomization file, which manages Kubernetes configurations
+kind: Kustomization
+
+# A list of Kubernetes manifest files to be included and managed by this Kustomization
+resources:
+  # Includes the deployment configuration file in the build
+  - deployment.yaml
+
+  # Includes the service configuration file in the build
+  - service.yaml

@@ -1,0 +1,135 @@
+# The file path indicating where this configuration is stored.
+# apps/user-service/base/deployment.yaml
+
+# Specifies the Kubernetes API version used for this resource
+apiVersion: apps/v1
+# Defines the resource type as a Deployment, which manages a set of replicated pods
+kind: Deployment
+
+# Contains identifying metadata for the deployment
+metadata:
+  # The unique name assigned to this deployment
+  name: user-service
+
+  # Key-value pairs used for organizing and categorizing the resource
+  labels:
+    # Identifies the specific application name
+    app.kubernetes.io/name: user-service
+    # Indicates that this deployment belongs to the overall 'shopsphere' application
+    app.kubernetes.io/part-of: shopsphere
+
+# Defines the desired state and behavior of the deployment
+spec:
+  # Specifies the number of pod instances to run concurrently
+  replicas: 1
+
+  # Determines how the deployment identifies which pods it is responsible for managing
+  selector:
+    # Matches pods that have this specific label
+    matchLabels:
+      app.kubernetes.io/name: user-service
+
+  # The template used by the deployment to create new pods
+  template:
+    # Metadata applied to the pods created from this template
+    metadata:
+      # Labels assigned to the newly created pods
+      labels:
+        app.kubernetes.io/name: user-service
+        app.kubernetes.io/part-of: shopsphere
+
+    # The specification of the pod's contents and behavior
+    spec:
+      # Specifies the ServiceAccount to be used by the pods for identity
+      serviceAccountName: user-service
+
+      # Prevents the automatic mounting of the ServiceAccount API token into the pod for better security
+      automountServiceAccountToken: false
+
+      # A list of containers to run within the pod
+      containers:
+        # The name of the container
+        - name: user-service
+
+          # The specific container image and tag to deploy
+          image: nikhilmhatre0317/shopsphere-user-service:84152f3
+
+          # Instructs Kubernetes to pull the image only if it is not already present on the local node
+          imagePullPolicy: IfNotPresent
+
+          # Defines the network ports exposed by the container
+          ports:
+            # A descriptive name for the port
+            - name: http
+              # The port number the container listens on
+              containerPort: 3000
+              # The network protocol used for the port
+              protocol: TCP
+
+          # Checks if the container is ready to start accepting network traffic
+          readinessProbe:
+            # Performs an HTTP GET request for the readiness check
+            httpGet:
+              # The endpoint path to request
+              path: /api/v1/health
+              # The port to send the request to
+              port: http
+            # The time to wait before performing the first probe after the container starts
+            initialDelaySeconds: 5
+            # How often to perform the probe
+            periodSeconds: 10
+            # The time to wait before timing out the probe request
+            timeoutSeconds: 5
+            # The number of consecutive failures allowed before marking the container as not ready
+            failureThreshold: 3
+
+          # Checks if the container is still running properly or if it needs to be restarted
+          livenessProbe:
+            # Performs an HTTP GET request for the liveness check
+            httpGet:
+              # The endpoint path to request
+              path: /api/v1/health
+              # The port to send the request to
+              port: http
+            # The time to wait before performing the first probe after the container starts
+            initialDelaySeconds: 30
+            # How often to perform the probe
+            periodSeconds: 20
+            # The time to wait before timing out the probe request
+            timeoutSeconds: 5
+            # The number of consecutive failures allowed before Kubernetes restarts the container
+            failureThreshold: 3
+
+          # Defines the compute resources required and restricted for the container
+          resources:
+            # The minimum amount of resources guaranteed to the container
+            requests:
+              cpu: 100m
+              memory: 128Mi
+
+            # The maximum amount of resources the container is allowed to consume
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
+# Standard YAML separator used to define multiple Kubernetes resources in a single file
+---
+# Specifies the core Kubernetes API version used for this resource
+apiVersion: v1
+# Defines the resource type as a ServiceAccount, providing an identity for pods
+kind: ServiceAccount
+
+# Contains identifying metadata for the ServiceAccount
+metadata:
+  # The unique name given to this ServiceAccount
+  name: user-service
+
+  # Key-value pairs used for organizing and categorizing the resource
+  labels:
+    # Identifies the specific application name
+    app.kubernetes.io/name: user-service
+    # Indicates that this ServiceAccount belongs to the overall 'shopsphere' application
+    app.kubernetes.io/part-of: shopsphere
+
+# Prevents the automatic mounting of the ServiceAccount API token globally for this account
+automountServiceAccountToken: false
