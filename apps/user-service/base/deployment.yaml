@@ -59,6 +59,14 @@ spec:
             - configMapRef:
                 name: user-service-config
 
+          # Includes the environmental secret need to run the application
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-database
+                  key: DATABASE_URL
+
           # Defines the network ports exposed by the container
           ports:
             # A descriptive name for the port
