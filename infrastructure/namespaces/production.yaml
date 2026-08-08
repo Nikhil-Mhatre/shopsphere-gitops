@@ -1,3 +1,6 @@
+# The file path indicating where this configuration is stored.
+# ShopSphere-GitOps/argocd/project/shopsphere-project.yaml
+
 # Specifies the Kubernetes API version to use for this resource.
 apiVersion: v1
 

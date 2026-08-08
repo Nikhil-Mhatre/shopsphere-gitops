@@ -289,12 +289,12 @@ docker --version
 
 Do not continue until:
 
-- [ ] Azure access works.
-- [ ] Docker Hub access works.
-- [ ] GitHub repository access works.
-- [ ] Kubernetes tooling is installed.
-- [ ] DNS/domain ownership is understood.
-- [ ] Managed PostgreSQL provisioning strategy is decided.
+- [✓] Azure access works.
+- [✓] Docker Hub access works.
+- [✓] GitHub repository access works.
+- [✓] Kubernetes tooling is installed.
+- [✓] DNS/domain ownership is understood.
+- [✓] Managed PostgreSQL provisioning strategy is decided.
 
 ---
 
@@ -413,11 +413,11 @@ node-...   Ready    ...
 
 ## Phase 3 Completion Criteria
 
-- [ ] AKS cluster exists.
-- [ ] Kubernetes API is reachable.
-- [ ] Nodes are Ready.
-- [ ] `kubectl` can communicate with the cluster.
-- [ ] Production cluster context is clearly identifiable.
+- [✓] AKS cluster exists.
+- [✓] Kubernetes API is reachable.
+- [✓] Nodes are Ready.
+- [✓] `kubectl` can communicate with the cluster.
+- [✓] Production cluster context is clearly identifiable.
 
 ---
 
@@ -452,10 +452,10 @@ AKS
 
 ## Phase 4 Completion Criteria
 
-- [ ] Namespace exists.
-- [ ] Namespace manifest is committed to Git.
-- [ ] Namespace naming follows conventions.
-- [ ] No application workloads have been deployed yet.
+- [✓] Namespace exists.
+- [✓] Namespace manifest is committed to Git.
+- [✓] Namespace naming follows conventions.
+- [✓] No application workloads have been deployed yet.
 
 ---
 
@@ -502,11 +502,11 @@ Argo CD should not replace GitHub Actions.
 
 ## Phase 5 Completion Criteria
 
-- [ ] Argo CD installed.
-- [ ] Argo CD components healthy.
-- [ ] Argo CD can access the GitOps repository.
-- [ ] Argo CD administrative access is secured.
-- [ ] Argo CD is ready to manage applications.
+- [ ✓ ] Argo CD installed.
+- [ ✓ ] Argo CD components healthy.
+- [ ✓ ] Argo CD can access the GitOps repository.
+- [ ✓ ] Argo CD administrative access is secured.
+- [ ✓ ] Argo CD is ready to manage applications.
 
 ---
 

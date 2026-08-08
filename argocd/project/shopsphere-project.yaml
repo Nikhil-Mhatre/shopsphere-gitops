@@ -1,0 +1,64 @@
+# The file path indicating where this configuration is stored.
+# ShopSphere-GitOps/argocd/project/shopsphere-project.yaml
+
+# Defines the specific ArgoCD API version to use for this resource.
+apiVersion: argoproj.io/v1alpha1
+
+# Specifies that the resource being created is an ArgoCD AppProject.
+kind: AppProject
+
+# Contains identifying metadata for the AppProject resource.
+metadata:
+  # The unique name assigned to this ArgoCD project.
+  name: shopsphere
+
+  # The namespace where this AppProject resource itself will be created.
+  namespace: argocd
+
+# Defines the specific rules and configurations for this project.
+spec:
+  # A brief description explaining that this project is for production applications.
+  description: ShopSphere production applications
+
+  # A list of allowed Git repositories that applications in this project can pull manifests from.
+  sourceRepos:
+    # A placeholder for the authorized GitOps repository URL.
+    - "https://github.com/Nikhil-Mhatre/shopsphere-gitops.git"
+
+  # A list of allowed target clusters and namespaces where this project can deploy resources.
+  destinations:
+    # Restricts the destination namespace to 'shopsphere-production'.
+    - namespace: shopsphere-production
+
+      # Specifies the local in-cluster Kubernetes server as the target destination.
+      server: https://kubernetes.default.svc
+
+  # A list defining which cluster-scoped resources can be deployed; an empty list means none are allowed.
+  clusterResourceWhitelist: []
+
+  # A list defining the specific namespace-scoped Kubernetes resources that are permitted to be deployed.
+  namespaceResourceWhitelist:
+    # Specifies the core Kubernetes API group for the following resource.
+    - group: ""
+      # Permits the deployment of ConfigMap resources.
+      kind: ConfigMap
+
+    # Specifies the core Kubernetes API group for the following resource.
+    - group: ""
+      # Permits the deployment of Secret resources.
+      kind: Secret
+
+    # Specifies the core Kubernetes API group for the following resource.
+    - group: ""
+      # Permits the deployment of Service resources.
+      kind: Service
+
+    # Specifies the 'apps' API group for the following resource.
+    - group: apps
+      # Permits the deployment of Deployment resources.
+      kind: Deployment
+
+    # Specifies the 'batch' API group for the following resource.
+    - group: batch
+      # Permits the deployment of Job resources.
+      kind: Job
