@@ -1,0 +1,18 @@
+# Specifies the Kubernetes API version to use for this resource.
+apiVersion: v1
+
+# Defines the type of resource being created, which is a Namespace for isolating resources.
+kind: Namespace
+
+# Contains identifying information for the resource.
+metadata:
+  # The unique name given to this namespace.
+  name: shopsphere-production
+
+  # Key-value pairs used for organizing and categorizing the resource.
+  labels:
+    # Indicates that this namespace belongs to the overall 'shopsphere' application.
+    app.kubernetes.io/part-of: shopsphere
+
+    # Marks this namespace as being used specifically for the production environment.
+    environment: production
